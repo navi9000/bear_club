@@ -1,5 +1,46 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@use "./reset.scss" as *;
+@use "./globals.scss" as *;
+@use "./theming.scss" as *;
+@use "./typography.scss" as *;
+@use "./layout.scss" as *;
+
+.header {
+  @include container();
+  @include padding("sm");
+  @include bgTheme();
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  &__text {
+    @include secondaryFont();
+    @include textSize("lg");
+  }
+}
+
+.main {
+  @include container();
+}
+
+.footer {
+  @include container();
+  @include padding("sm");
+  @include bgTheme();
+
+  & > * {
+    @include centered();
+  }
+}
+
+.controls {
+  @include grid(4);
+  @include padding("lg");
+  padding-inline: 0;
+
+  &__title {
+    grid-column: span 2;
+  }
 }

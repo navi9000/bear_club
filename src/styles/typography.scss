@@ -1,0 +1,15 @@
+@mixin secondaryFont() {
+  font-family: "Adamina";
+}
+
+@mixin textSize($value) {
+  @if ($value == "lg") {
+    font-size: 24px;
+  }
+  @if ($value == "md") {
+    font-size: 18px;
+  }
+  @if ($value == "sm") {
+    font-size: 14px;
+  }
+}
