@@ -1,2 +1,3 @@
-console.log("Hello world")
-console.log("Hello world")
+import App from "./src/js/App"
+
+const app = new App()

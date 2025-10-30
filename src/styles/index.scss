@@ -44,3 +44,129 @@
     grid-column: span 2;
   }
 }
+
+.list {
+  @include grid(4);
+}
+
+@mixin defaultCard() {
+  --card-bg-color: #fff;
+  --card-name-color: #3f3f3f;
+  --card-desc-color: #767676;
+}
+
+@mixin inReserveCard() {
+  --card-bg-color: #208085;
+  --card-name-color: #fff;
+  --card-desc-color: #e7e7e7;
+}
+
+.card {
+  &_default {
+    @include defaultCard();
+  }
+  &_inreserve {
+    @include inReserveCard();
+  }
+
+  & {
+    height: 349px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--card-bg-color);
+    transition: box-shadow 300ms;
+    &:hover {
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.26);
+    }
+  }
+
+  &__image {
+    height: 146px;
+    width: 100%;
+    position: relative;
+
+    img {
+      object-fit: cover;
+      height: inherit;
+      width: inherit;
+      display: flex;
+    }
+  }
+
+  &__inreservelabel {
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    top: 0;
+    left: 0;
+    color: #58ffb5;
+    padding-top: 16px;
+    background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0) 100%);
+    z-index: 1;
+    text-align: center;
+  }
+
+  &__datawrapper {
+    @include centered();
+    @include padding("md");
+    height: 100%;
+    gap: 24px;
+  }
+
+  &__descwrapper {
+    @include centered();
+    gap: 10px;
+  }
+
+  &__name {
+    @include textSize("md");
+    color: var(--card-name-color);
+  }
+
+  &__linewrapper {
+    @include textSize("sm");
+    @include centered();
+    color: var(--card-desc-color);
+  }
+
+  &__buttonwrapper {
+    @include centered();
+    gap: 10px;
+    width: 100%;
+  }
+}
+
+.button {
+  @include textSize("sm");
+  @include centered();
+  justify-content: center;
+  border-radius: 16px;
+  height: 32px;
+  width: 100%;
+  transition: 300ms;
+  cursor: pointer;
+  border: 2px solid;
+
+  &_primary {
+    background-color: #58ffb5;
+    color: #208085;
+    border-color: transparent;
+    &:hover {
+      background-color: #feed7e;
+    }
+  }
+
+  &_secondary {
+    background-color: #208085;
+    color: #fff;
+    border-color: transparent;
+
+    &:hover {
+      background-color: #0e4447;
+    }
+  }
+
+  &_withborder {
+    border-color: #fff;
+  }
+}
