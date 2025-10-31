@@ -36,7 +36,7 @@ async function mutation(endpoint, params = {}, method = "POST") {
   try {
     const res = await fetch(SERVER_ROOT.concat(endpoint), {
       method,
-      body: params,
+      body: JSON.stringify(params),
     })
     if (!res.ok) {
       throw res.statusText
