@@ -23,6 +23,12 @@
 
 .main {
   @include container();
+  @include padding("lg");
+  @include centered();
+  gap: 40px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  height: 100%;
 }
 
 .footer {
@@ -33,11 +39,24 @@
   & > * {
     @include centered();
   }
+
+  position: relative;
+
+  &::after {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    width: 100%;
+    height: 40px;
+    content: "";
+    background-color: #f2f2f2;
+    mask-image: linear-gradient(to bottom, transparent, #000);
+    pointer-events: none;
+  }
 }
 
 .controls {
   @include grid(4);
-  @include padding("lg");
   padding-inline: 0;
 
   &__title {
