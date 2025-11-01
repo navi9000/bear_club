@@ -2,6 +2,9 @@ import "./utils/types"
 import { getBears, getBearById } from "./utils/http"
 
 class Store {
+  /**
+   * @type {[Bear] | null}
+   */
   #bearList = null
   #bearItems = {}
   #bearStatus = {

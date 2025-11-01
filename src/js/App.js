@@ -2,7 +2,7 @@ import "./utils/types"
 import Template from "./Template"
 import store from "./Store"
 import { on, qs } from "./utils/dom"
-import { setSearchParam } from "./utils/url"
+import { parseSearchParams, setSearchParam } from "./utils/url"
 
 class App {
   #store
@@ -12,23 +12,39 @@ class App {
     const isReserveCheckbox = qs("#is-reserve")
     const typeSelector = qs("#type-selector")
 
-    on("change", isReserveCheckbox, (e) => {
+    window.addEventListener("change", () => {
+      console.log(window.location.href)
+    })
+
+    on(isReserveCheckbox, "change", (e) => {
       const value = e.target.checked
       setSearchParam("reserve", value)
     })
 
-    on("change", typeSelector, (e) => {
+    on(typeSelector, "change", (e) => {
       const value = e.target.value
       setSearchParam("selection", value)
     })
 
-    this.#store.getBears().then((res) => {
-      if (res) {
-        bearList.innerHTML = res
-          .map((item) => Template.renderCard(item))
-          .join("")
-      }
-    })
+    const loadPage = () => {
+      this.#store.getBears().then((res) => {
+        if (res) {
+          bearList.innerHTML = res
+            .filter((item) => {
+              const { reserve, selection, opened } = parseSearchParams()
+              if (reserve && !item.in_reserve) {
+                return false
+              }
+              return true
+            })
+            .map((item) => Template.renderCard(item))
+            .join("")
+        }
+      })
+    }
+
+    on(window, "load", loadPage)
+    on(window, "change", loadPage)
   }
 }
 

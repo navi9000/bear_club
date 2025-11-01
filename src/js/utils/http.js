@@ -52,7 +52,7 @@ async function mutation(endpoint, params = {}, method = "POST") {
     } else {
       message = "Unknown error"
     }
-    console.log(message)
+    console.error(message)
     return null
   }
 }

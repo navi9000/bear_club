@@ -23,11 +23,11 @@ let destructibleListeners = []
 
 /**
  *
- * @param {string} event
  * @param {HTMLElement | Document | Window} target
+ * @param {string} event
  * @param {function} callback
  */
-export function on(event, target, callback, isDesctructible = false) {
+export function on(target, event, callback, isDesctructible = false) {
   target.addEventListener(event, callback)
   if (isDesctructible) {
     destructibleListeners.push([target, event, callback])
