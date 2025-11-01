@@ -58,7 +58,15 @@ async function mutation(endpoint, params = {}, method = "POST") {
 }
 
 export async function getBears() {
-  return query("/get-bears")
+  const serverData = await query("/get-bears")
+  if (serverData && serverData.success) {
+    /**
+     * @type {[Bear]}
+     */
+    const data = serverData.results.data
+    return data
+  }
+  return null
 }
 
 /**
@@ -66,7 +74,15 @@ export async function getBears() {
  * @param {number} id
  */
 export async function getBearById(id) {
-  return query(`/get-bears/${id}`)
+  const serverData = await query(`/get-bears/${id}`)
+  if (serverData && serverData.success) {
+    /**
+     * @type {Bear}
+     */
+    const data = serverData.data
+    return data
+  }
+  return null
 }
 
 /**

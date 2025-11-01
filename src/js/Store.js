@@ -1,4 +1,5 @@
 import "./utils/types"
+import { getBears, getBearById } from "./utils/http"
 
 class Store {
   #bearList = null
@@ -9,5 +10,15 @@ class Store {
   }
   #onlyInReserve = false
 
-  constructor() {}
+  async getBears() {
+    if (!this.#bearList) {
+      const bearList = await getBears()
+      if (bearList) {
+        this.#bearList = bearList
+      }
+    }
+    return this.#bearList
+  }
 }
+
+export default new Store()
