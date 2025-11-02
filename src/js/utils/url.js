@@ -50,6 +50,15 @@ function getSearchParam(name) {
   }
 }
 
+/**
+ *
+ * @param {string} name
+ */
+export function srchP(name) {
+  const searchParams = new URLSearchParams(window.location.search)
+  return searchParams.get(name)
+}
+
 export function parseSearchParams() {
   return {
     reserve: getSearchParam("reserve"),

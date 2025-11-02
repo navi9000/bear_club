@@ -1,6 +1,6 @@
-import { qs, on } from "./utils/dom"
+import { qs, on, qsa, clearSavedListeners } from "./utils/dom"
 import store from "./Store"
-import { parseSearchParams, setSearchParam } from "./utils/url"
+import { parseSearchParams } from "./utils/url"
 import Template from "./Template"
 
 class View {
@@ -8,19 +8,31 @@ class View {
     this.$bearList = qs(".list")
     this.$isReserve = qs("#is-reserve")
     this.$group = qs("#type-selector")
-
-    on(this.$isReserve, "change", (e) => {
-      const value = e.target.checked
-      setSearchParam("reserve", value)
-    })
-
-    on(this.$group, "change", (e) => {
-      const value = e.target.value
-      setSearchParam("selection", value)
-    })
   }
 
-  async loadPage() {
+  render(viewName, value) {
+    switch (viewName) {
+      case "reserveCheckbox":
+        this.$isReserve.checked = value
+        break
+      case "typeSelector":
+        console.log({ value })
+        this.$group.value = value
+    }
+  }
+
+  bind(event, handler) {
+    switch (event) {
+      case "toggleReserve":
+        on(this.$isReserve, "change", handler)
+        break
+      case "selectType":
+        on(this.$group, "change", handler)
+    }
+  }
+
+  async loadBears() {
+    clearSavedListeners()
     const bearList = await store.getBears()
     if (bearList) {
       this.$bearList.innerHTML = bearList
@@ -29,11 +41,50 @@ class View {
           if (reserve && !item.in_reserve) {
             return false
           }
+
+          if (!selection || selection === "incoming") {
+            const { accepted, rejected } = store.getBearStatusList()
+            const excludedList = [...accepted, ...rejected]
+            if (excludedList.some((excludedId) => excludedId === item.id)) {
+              return false
+            }
+          }
           return true
         })
         .map((item) => Template.renderCard(item))
         .join("")
     }
+
+    const cardList = qsa(".card", this.$bearList)
+    cardList.forEach((card) => {
+      const id = +card.attributes["data-id"].value
+      const [$acceptButton, $rejectButton] = qsa(
+        `[data-id="${id}"] button`,
+        this.$bearList
+      )
+      if ($acceptButton) {
+        on(
+          $acceptButton,
+          "click",
+          () => {
+            store.acceptBear(id)
+            this.loadBears()
+          },
+          true
+        )
+      }
+      if ($rejectButton) {
+        on(
+          $rejectButton,
+          "click",
+          () => {
+            store.rejectBear(id)
+            this.loadBears()
+          },
+          true
+        )
+      }
+    })
   }
 }
 

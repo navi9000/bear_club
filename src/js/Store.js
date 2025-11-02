@@ -1,5 +1,5 @@
 import "./utils/types"
-import { getBears, getBearById } from "./utils/http"
+import { getBears, getBearById, acceptBear, rejectBear } from "./utils/http"
 
 class Store {
   /**
@@ -8,7 +8,13 @@ class Store {
   #bearList = null
   #bearItems = {}
   #bearStatus = {
+    /**
+     * @type {[number]}
+     */
     accepted: [],
+    /**
+     * @type {[number]}
+     */
     rejected: [],
   }
   #onlyInReserve = false
@@ -21,6 +27,22 @@ class Store {
       }
     }
     return this.#bearList
+  }
+
+  /**
+   *
+   * @param {number} id
+   */
+  async acceptBear(id) {
+    this.#bearStatus.accepted = [...this.#bearStatus.accepted, id]
+  }
+
+  async rejectBear(id) {
+    this.#bearStatus.rejected = [...this.#bearStatus.rejected, id]
+  }
+
+  getBearStatusList() {
+    return this.#bearStatus
   }
 }
 
