@@ -3,7 +3,7 @@
  * @param {string} name
  * @param {any} value
  */
-export function setSearchParam(name, value) {
+export function setSP(name, value) {
   const searchParams = new URLSearchParams(window.location.search)
   if (Array.isArray(value) && value.length) {
     searchParams.set(name, value.join(","))
@@ -54,7 +54,7 @@ function getSearchParam(name) {
  *
  * @param {string} name
  */
-export function srchP(name) {
+export function getSP(name) {
   const searchParams = new URLSearchParams(window.location.search)
   return searchParams.get(name)
 }

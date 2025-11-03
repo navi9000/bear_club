@@ -1,5 +1,5 @@
 import store from "./Store"
-import { parseSearchParams, setSearchParam, srchP } from "./utils/url"
+import { parseSearchParams, getSP, setSP } from "./utils/url"
 import View from "./View"
 
 class Controller {
@@ -11,36 +11,57 @@ class Controller {
   constructor(view) {
     this.#view = view
 
-    this.#view.bind("toggleReserve", (e) =>
-      setSearchParam("reserve", e.target.checked)
-    )
-    this.#view.bind("selectType", (e) =>
-      setSearchParam("selection", e.target.value)
-    )
+    this.#view.bind("toggleReserve", (e) => {
+      setSP("reserve", e.target.checked)
+      this.#loadBearList()
+    })
+    this.#view.bind("selectType", (e) => {
+      setSP("selection", e.target.value)
+      this.#loadPageTitle()
+      this.#loadCheckbox()
+      this.#loadBearList()
+    })
     this.#view.bind("acceptBear", (e) => {
       const card = e.target.closest(".card")
       const id = card.attributes["data-id"].value
       store.acceptBear(+id)
-      this.init()
+      this.#loadBearList()
     })
     this.#view.bind("rejectBear", (e) => {
       const card = e.target.closest(".card")
       const id = card.attributes["data-id"].value
       store.rejectBear(+id)
-      this.init()
+      this.#loadBearList()
     })
     this.#view.bind("openModal", (e) => {
       const card = e.target.closest(".card")
       const id = +card.attributes["data-id"].value
-      setSearchParam("open", id)
-      this.init()
+      setSP("open", id)
+      this.#loadModal()
     })
   }
 
   async init() {
-    this.#view.render("pageTitle", srchP("selection"))
-    this.#view.render("reserveCheckbox", srchP("reserve") === "true")
-    this.#view.render("typeSelector", srchP("selection") ?? "incoming")
+    this.#loadPageTitle()
+    this.#loadCheckbox()
+    this.#loadTypeSelector()
+    this.#loadBearList()
+    this.#loadModal()
+  }
+
+  async #loadPageTitle() {
+    this.#view.render("pageTitle", getSP("selection"))
+  }
+
+  async #loadCheckbox() {
+    this.#view.render("reserveCheckbox", getSP("reserve") === "true")
+  }
+
+  async #loadTypeSelector() {
+    this.#view.render("typeSelector", getSP("selection") ?? "incoming")
+  }
+
+  async #loadBearList() {
     this.#view.render(
       "bearList",
       (await store.getBears()).filter((item) => {
@@ -59,8 +80,11 @@ class Controller {
         return true
       })
     )
-    this.#view.render("modalState", srchP("open"))
-    this.#view.render("modal", srchP("open"))
+  }
+
+  async #loadModal() {
+    this.#view.render("modalState", getSP("open"))
+    this.#view.render("modal", getSP("open"))
   }
 }
 
