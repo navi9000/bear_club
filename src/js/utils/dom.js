@@ -17,26 +17,23 @@ export function qsa(querySelector, target = document) {
 }
 
 /**
- * @type {[[HTMLElement | Document | Window, string, function]]}
- */
-let destructibleListeners = []
-
-/**
  *
  * @param {HTMLElement | Document | Window} target
  * @param {string} event
  * @param {function} callback
  */
-export function on(target, event, callback, isDesctructible = false) {
+export function on(target, event, callback) {
   target.addEventListener(event, callback)
-  if (isDesctructible) {
-    destructibleListeners.push([target, event, callback])
-  }
 }
 
-export function clearSavedListeners() {
-  destructibleListeners.forEach(([target, event, callback]) => {
-    target.removeEventListener(event, callback)
-  })
-  destructibleListeners = []
+export function delegate(target, selector, event, callback) {
+  function dispatchEvent(e) {
+    const targetElement = e.target.closest(selector)
+    const elementList = qsa(selector, target)
+    const hasMatch = [...elementList].includes(targetElement)
+    if (hasMatch) {
+      callback.call(targetElement, e)
+    }
+  }
+  on(target, event, dispatchEvent)
 }

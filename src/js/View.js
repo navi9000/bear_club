@@ -1,23 +1,36 @@
-import { qs, on, qsa, clearSavedListeners } from "./utils/dom"
-import store from "./Store"
-import { parseSearchParams } from "./utils/url"
+import { qs, on, delegate } from "./utils/dom"
 import Template from "./Template"
 
 class View {
   constructor() {
-    this.$bearList = qs(".list")
+    this.$pageTitle = qs(".controls__title")
     this.$isReserve = qs("#is-reserve")
     this.$group = qs("#type-selector")
+    this.$bearList = qs(".list")
+    this.$modal = qs(".modal")
   }
 
   render(viewName, value) {
     switch (viewName) {
+      case "pageTitle":
+        this.$pageTitle.innerHTML = Template.renderPageTitle(value)
       case "reserveCheckbox":
         this.$isReserve.checked = value
         break
       case "typeSelector":
-        console.log({ value })
         this.$group.value = value
+        break
+      case "bearList":
+        this.$bearList.innerHTML = this.#getBearList(value)
+        break
+      case "modal":
+        this.$modal.innerHTML = this.#getModal(value)
+        break
+      case "modalState":
+        this.$modal.open = !!value
+        break
+      default:
+        console.warn("Unknown view: ", viewName)
     }
   }
 
@@ -28,63 +41,55 @@ class View {
         break
       case "selectType":
         on(this.$group, "change", handler)
+        break
+      case "acceptBear":
+        delegate(this.$bearList, "[data-type='accept']", "click", handler)
+        break
+      case "rejectBear":
+        delegate(this.$bearList, "[data-type='reject']", "click", handler)
+        break
+      case "openModal":
+        delegate(this.$bearList, ".card", "click", handler)
+        break
+      case "closeModalAccept":
+        delegate(this.$modal, "[data-type='accept']", "click", handler)
+        break
+      case "closeModalReject":
+        delegate(this.$modal, "[data-type='reject']", "click", handler)
+        break
+      case "closeModalCancel":
+        delegate(this.$modal, ".cancel-button", "click", handler)
+        break
+      default:
+        console.warn("Unknown event: ", event)
     }
   }
 
-  async loadBears() {
-    clearSavedListeners()
-    const bearList = await store.getBears()
-    if (bearList) {
-      this.$bearList.innerHTML = bearList
-        .filter((item) => {
-          const { reserve, selection, opened } = parseSearchParams()
-          if (reserve && !item.in_reserve) {
-            return false
-          }
-
-          if (!selection || selection === "incoming") {
-            const { accepted, rejected } = store.getBearStatusList()
-            const excludedList = [...accepted, ...rejected]
-            if (excludedList.some((excludedId) => excludedId === item.id)) {
-              return false
-            }
-          }
-          return true
-        })
-        .map((item) => Template.renderCard(item))
-        .join("")
+  /**
+   *
+   * @param {[Bear]=} value
+   */
+  #getBearList(value) {
+    if (!value) {
+      return Template.renderListError()
+    } else if (value.length === 0) {
+      return Template.renderEmptyList()
+    } else {
+      return value.map((item) => Template.renderCard(item)).join("")
     }
+  }
 
-    const cardList = qsa(".card", this.$bearList)
-    cardList.forEach((card) => {
-      const id = +card.attributes["data-id"].value
-      const [$acceptButton, $rejectButton] = qsa(
-        `[data-id="${id}"] button`,
-        this.$bearList
-      )
-      if ($acceptButton) {
-        on(
-          $acceptButton,
-          "click",
-          () => {
-            store.acceptBear(id)
-            this.loadBears()
-          },
-          true
-        )
-      }
-      if ($rejectButton) {
-        on(
-          $rejectButton,
-          "click",
-          () => {
-            store.rejectBear(id)
-            this.loadBears()
-          },
-          true
-        )
-      }
-    })
+  /**
+   *
+   * @param {string=} value
+   */
+  #getModal(value) {
+    console.log({ getModalProp: value })
+    if (!value) {
+      return ""
+    } else {
+      return "<div>Hello world</div>"
+    }
   }
 }
 

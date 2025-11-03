@@ -10,7 +10,7 @@ class App {
     this.#controller = new Controller(this.#view)
 
     on(window, "DOMContentLoaded", this.#controller.init.bind(this.#controller))
-    on(window, "change", this.#controller.updateList.bind(this.#controller))
+    on(window, "change", this.#controller.init.bind(this.#controller))
   }
 }
 

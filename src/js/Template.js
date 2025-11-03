@@ -22,11 +22,19 @@ export default class Template {
     `
   }
 
+  static #CardTemplateEmptyList() {
+    return `<li class="card-error-message">Список пуст</li>`
+  }
+
+  static #CardTemplateError() {
+    return `<li class="card-error-message">Не удалось загрузить данные. Попробуйте позже</li>`
+  }
+
   static #CardButtonWrapperTemplate() {
     return `
       <div class="card__buttonwrapper">
-        <button class="button {{accept_button_style}}">Принять</button>
-        <button class="button {{reject_button_style}}">Отклонить</button>
+        <button class="button {{accept_button_style}}" data-type="accept">Принять</button>
+        <button class="button {{reject_button_style}}" data-type="reject">Отклонить</button>
       </div>
     `
   }
@@ -55,6 +63,14 @@ export default class Template {
     return cardTemplate
   }
 
+  static renderEmptyList() {
+    return this.#CardTemplateEmptyList()
+  }
+
+  static renderListError() {
+    return this.#CardTemplateError()
+  }
+
   /**
    *
    * @param {boolean} in_reserve
@@ -68,5 +84,19 @@ export default class Template {
       )
 
     return buttonTemplate
+  }
+
+  /**
+   *
+   * @param {string=} selection
+   */
+  static renderPageTitle(selection) {
+    if (selection === "accepted") {
+      return "Принятые медведи"
+    } else if (selection === "rejected") {
+      return "Отклоненные медведи"
+    } else {
+      return "Поступившие заявки"
+    }
   }
 }

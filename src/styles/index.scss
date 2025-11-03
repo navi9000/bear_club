@@ -143,6 +143,13 @@
   }
 }
 
+.card-error-message {
+  grid-column: span 4;
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+}
+
 .button {
   @include textSize("sm");
   @include centered();

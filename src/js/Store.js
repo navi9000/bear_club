@@ -3,9 +3,9 @@ import { getBears, getBearById, acceptBear, rejectBear } from "./utils/http"
 
 class Store {
   /**
-   * @type {[Bear] | null}
+   * @type {[Bear]=}
    */
-  #bearList = null
+  #bearList
   #bearItems = {}
   #bearStatus = {
     /**
