@@ -1,12 +1,11 @@
 import store from "./Store"
 import { parseSearchParams, getSP, setSP } from "./utils/url"
-import View from "./View"
 
 class Controller {
   #view
   /**
    *
-   * @param {View} view
+   * @param {import("./View").default} view
    */
   constructor(view) {
     this.#view = view
@@ -22,21 +21,15 @@ class Controller {
       this.#loadBearList()
     })
     this.#view.bind("acceptBear", (e) => {
-      const card = e.target.closest(".card")
-      const id = card.attributes["data-id"].value
-      store.acceptBear(+id)
+      store.acceptBear(this.#cardId(e))
       this.#loadBearList()
     })
     this.#view.bind("rejectBear", (e) => {
-      const card = e.target.closest(".card")
-      const id = card.attributes["data-id"].value
-      store.rejectBear(+id)
+      store.rejectBear(this.#cardId(e))
       this.#loadBearList()
     })
     this.#view.bind("openModal", (e) => {
-      const card = e.target.closest(".card")
-      const id = +card.attributes["data-id"].value
-      setSP("open", id)
+      setSP("open", this.#cardId(e))
       this.#loadModal()
     })
   }
@@ -47,6 +40,12 @@ class Controller {
     this.#loadTypeSelector()
     this.#loadBearList()
     this.#loadModal()
+  }
+
+  #cardId(event) {
+    const card = event.target.closest(".card")
+    const id = card.attributes["data-id"].value
+    return +id
   }
 
   async #loadPageTitle() {
