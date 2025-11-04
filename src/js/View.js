@@ -27,7 +27,12 @@ class View {
         this.$modal.innerHTML = this.#getModal(value)
         break
       case "modalState":
-        this.$modal.open = !!value
+        if (!!value) {
+          this.$modal.showModal()
+        } else {
+          this.$modal.close()
+        }
+
         break
       default:
         console.warn("Unknown view: ", viewName)

@@ -60,7 +60,7 @@ export default class Template {
           </div>
         </div>
       </div>
-      <button class="cancel-button">x</button>
+      <button class="cancel-button"></button>
     `
   }
 
