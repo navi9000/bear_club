@@ -46,10 +46,13 @@
     <main class="main">
       <div class="controls">
           <h1 class="controls__title"></h1>
-          <div>
+          <label for="is-reserve" class="checkboxlabel">
             <input type="checkbox" id="is-reserve"></input>
-            <span>Только из заповедника</span>
-          </div>
+            <div class="checkboxlabel__contentwrapper">
+              <span class="customcheckbox"></span>
+              <span class="checkboxlabel">Только из заповедника</span>
+            </div>
+          </label>
           <select id="type-selector">
             <option value="incoming">Входящие медведи</option>
             <option value="accepted">Принятые медведи</option>

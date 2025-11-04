@@ -5,6 +5,7 @@ class View {
   constructor() {
     this.$pageTitle = qs(".controls__title")
     this.$isReserve = qs("#is-reserve")
+    this.$customCheckbox = qs(".customcheckbox")
     this.$group = qs("#type-selector")
     this.$bearList = qs(".list")
     this.$modal = qs(".modal")
@@ -16,6 +17,9 @@ class View {
         this.$pageTitle.innerHTML = Template.renderPageTitle(value)
       case "reserveCheckbox":
         this.$isReserve.checked = value
+        this.$customCheckbox.classList = `customcheckbox${
+          value ? " customcheckbox_checked" : ""
+        }`
         break
       case "typeSelector":
         this.$group.value = value

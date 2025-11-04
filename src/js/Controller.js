@@ -12,6 +12,7 @@ class Controller {
 
     this.#view.bind("toggleReserve", (e) => {
       setSP("reserve", e.target.checked)
+      this.#loadCheckbox()
       this.#loadBearList()
     })
     this.#view.bind("selectType", (e) => {
