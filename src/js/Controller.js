@@ -32,6 +32,22 @@ class Controller {
       setSP("open", this.#cardId(e))
       this.#loadModal()
     })
+    this.#view.bind("closeModalAccept", () => {
+      store.acceptBear(+getSP("open"))
+      setSP("open", null)
+      this.#loadModal()
+      this.#loadBearList()
+    })
+    this.#view.bind("closeModalReject", () => {
+      store.rejectBear(+getSP("open"))
+      setSP("open", null)
+      this.#loadModal()
+      this.#loadBearList()
+    })
+    this.#view.bind("closeModalCancel", () => {
+      setSP("open", null)
+      this.#loadModal()
+    })
   }
 
   async init() {

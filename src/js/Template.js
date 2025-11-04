@@ -41,23 +41,26 @@ export default class Template {
 
   static #ModalTemplate() {
     return `
-      <div class="modal__inlay {{inlay_style}}">
-        <div class="modal__image">
-          <img src="{{img_src}}" alt="image"></img>
-          {{in_reserve_marker}}
-        </div>
-        <div class="modal__datawrapper">
-          <div class="modal__descwrapper">
-            <p class="modal__name">{{name}}</p>
-            <div class="modal__linewrapper">
-              <p>{{type}}</p>
-              <p>{{gender}}</p>
-            </div>
-            <div class="modal__description">{{description}}</div>
+      <div class="modal__inlaywrapper">
+        <div class="modal__inlay {{inlay_style}}">
+          <div class="modal__image">
+            <img src="{{img_src}}" alt="image"></img>
+            {{in_reserve_marker}}
           </div>
-          {{button_wrapper}}
+          <div class="modal__datawrapper">
+            <div class="modal__descwrapper">
+              <p class="modal__name">{{name}}</p>
+              <div class="modal__linewrapper">
+                <p>{{type}}</p>
+                <p>{{gender}}</p>
+              </div>
+              <div class="modal__description">{{description}}</div>
+            </div>
+            {{button_wrapper}}
+          </div>
         </div>
       </div>
+      <button class="cancel-button">x</button>
     `
   }
 

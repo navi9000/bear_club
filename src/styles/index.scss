@@ -153,13 +153,16 @@
 .modal {
   & {
     z-index: 10;
-    border-radius: 6px;
     border: none;
-    width: 460px;
-    max-height: calc(100vh - 60px);
     height: max-content;
+    width: max-content;
     top: 30px;
-    overflow: auto;
+    background-color: transparent;
+  }
+
+  &__inlaywrapper {
+    border-radius: 6px;
+    overflow: hidden;
   }
 
   &__inlay {
@@ -172,6 +175,10 @@
 
     & {
       background-color: var(--card-bg-color);
+      width: 460px;
+      max-height: calc(100vh - 60px);
+      height: max-content;
+      overflow: auto;
     }
   }
 
@@ -184,7 +191,6 @@
     top: 0;
     left: 0;
     color: #58ffb5;
-    // padding-top: 16px;
     background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0) 100%);
     z-index: 1;
   }
@@ -251,6 +257,12 @@
     gap: 10px;
     width: 100%;
   }
+}
+
+.cancel-button {
+  position: absolute;
+  top: 0;
+  right: -20px;
 }
 
 .button {
