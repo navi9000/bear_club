@@ -82,8 +82,9 @@ class Controller {
   }
 
   async #loadModal() {
-    this.#view.render("modalState", getSP("open"))
-    this.#view.render("modal", getSP("open"))
+    const id = getSP("open")
+    this.#view.render("modal", id ? await store.getBear(id) : undefined)
+    this.#view.render("modalState", id)
   }
 }
 

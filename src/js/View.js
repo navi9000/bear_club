@@ -81,14 +81,13 @@ class View {
 
   /**
    *
-   * @param {string=} value
+   * @param {Bear=} bear
    */
-  #getModal(value) {
-    console.log({ getModalProp: value })
-    if (!value) {
+  #getModal(bear) {
+    if (!bear) {
       return ""
     } else {
-      return "<div>Hello world</div>"
+      return Template.renderModal(bear)
     }
   }
 }

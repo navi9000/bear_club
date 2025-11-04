@@ -150,6 +150,109 @@
   justify-content: center;
 }
 
+.modal {
+  & {
+    z-index: 10;
+    border-radius: 6px;
+    border: none;
+    width: 460px;
+    max-height: calc(100vh - 60px);
+    height: max-content;
+    top: 30px;
+    overflow: auto;
+  }
+
+  &__inlay {
+    &_default {
+      @include defaultCard();
+    }
+    &_inreserve {
+      @include inReserveCard();
+    }
+
+    & {
+      background-color: var(--card-bg-color);
+    }
+  }
+
+  &__inreservelabel {
+    @include textSize("lg");
+    @include padding("md");
+    position: absolute;
+    height: 200px;
+    width: inherit;
+    top: 0;
+    left: 0;
+    color: #58ffb5;
+    // padding-top: 16px;
+    background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0) 100%);
+    z-index: 1;
+  }
+
+  &::backdrop {
+    // backdrop-filter: blur(81.54845428466797px);
+    // background: rgba(14, 68, 71, 0.2);
+    // height: 100%;
+    // width: 100%;
+    // background-image: linear-gradient(
+    //   45deg,
+    //   magenta,
+    //   rebeccapurple,
+    //   dodgerblue,
+    //   green
+    // );
+    // opacity: 0.75;
+  }
+
+  &__image {
+    border-radius: 6px 6px 0 0;
+    height: 400px;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    img {
+      object-fit: cover;
+      height: inherit;
+      width: inherit;
+      display: flex;
+    }
+  }
+
+  &__datawrapper {
+    @include padding("md");
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__descwrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__name {
+    @include textSize("lg");
+    color: var(--card-name-color);
+  }
+
+  &__linewrapper {
+    @include textSize("md");
+    color: var(--card-desc-color);
+  }
+
+  &__description {
+    @include textSize("sm");
+    color: var(--card-desc-color);
+  }
+
+  &__buttonwrapper {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+}
+
 .button {
   @include textSize("sm");
   @include centered();

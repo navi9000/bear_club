@@ -1,12 +1,15 @@
 const SERVER_ROOT = "https://private-9d5e37a-testassignment.apiary-mock.com"
+const SERVER_ROOT_2 =
+  "https://private-dd610-ruporttestassignment.apiary-mock.com"
 
 /**
  *
  * @param {string} endpoint
  */
-async function query(endpoint) {
+async function query(endpoint, isSecondServer = false) {
   try {
-    const res = await fetch(SERVER_ROOT.concat(endpoint))
+    const root = isSecondServer ? SERVER_ROOT_2 : SERVER_ROOT
+    const res = await fetch(root.concat(endpoint))
     if (!res.ok) {
       throw res.statusText
     }
@@ -74,7 +77,7 @@ export async function getBears() {
  * @param {number} id
  */
 export async function getBearById(id) {
-  const serverData = await query(`/get-bears/${id}`)
+  const serverData = await query(`/get-bears/${id}`, true)
   if (serverData && serverData.success) {
     /**
      * @type {Bear}

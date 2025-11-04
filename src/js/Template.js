@@ -39,6 +39,37 @@ export default class Template {
     `
   }
 
+  static #ModalTemplate() {
+    return `
+      <div class="modal__inlay {{inlay_style}}">
+        <div class="modal__image">
+          <img src="{{img_src}}" alt="image"></img>
+          {{in_reserve_marker}}
+        </div>
+        <div class="modal__datawrapper">
+          <div class="modal__descwrapper">
+            <p class="modal__name">{{name}}</p>
+            <div class="modal__linewrapper">
+              <p>{{type}}</p>
+              <p>{{gender}}</p>
+            </div>
+            <div class="modal__description">{{description}}</div>
+          </div>
+          {{button_wrapper}}
+        </div>
+      </div>
+    `
+  }
+
+  static #ModalButtonWrapperTemplate() {
+    return `
+      <div class="modal__buttonwrapper">
+        <button class="button {{accept_button_style}}" data-type="accept">Принять</button>
+        <button class="button {{reject_button_style}}" data-type="reject">Отклонить</button>
+      </div>
+    `
+  }
+
   /**
    *
    * @param {Bear} bear
@@ -98,5 +129,46 @@ export default class Template {
     } else {
       return "Поступившие заявки"
     }
+  }
+
+  /**
+   * @param {Bear} bear
+   */
+  static renderModal({ image_url, name, type, gender, in_reserve, text }) {
+    let modalTemplate = this.#ModalTemplate()
+      .replace(
+        "{{inlay_style}}",
+        in_reserve ? "modal__inlay_inreserve" : "modal__inlay_default"
+      )
+      .replace("{{img_src}}", image_url)
+      .replace(
+        "{{in_reserve_marker}}",
+        in_reserve
+          ? "<div class='modal__inreservelabel'>В заповеднике</div>"
+          : ""
+      )
+      .replace("{{name}}", name)
+      .replace("{{type}}", type)
+      .replace("{{gender}}", gender)
+      .replace("{{description}}", text ?? "Нет описания")
+      // позже будет условие
+      .replace("{{button_wrapper}}", this.renderModalButtons(in_reserve))
+
+    return modalTemplate
+  }
+
+  /**
+   *
+   * @param {boolean} in_reserve
+   */
+  static renderModalButtons(in_reserve) {
+    let buttonTemplate = this.#ModalButtonWrapperTemplate()
+      .replace("{{accept_button_style}}", "button_primary")
+      .replace(
+        "{{reject_button_style}}",
+        in_reserve ? "button_secondary button_withborder" : "button_secondary"
+      )
+
+    return buttonTemplate
   }
 }

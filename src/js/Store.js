@@ -17,7 +17,6 @@ class Store {
      */
     rejected: [],
   }
-  #onlyInReserve = false
 
   async getBears() {
     if (!this.#bearList) {
@@ -27,6 +26,17 @@ class Store {
       }
     }
     return this.#bearList
+  }
+
+  async getBear(id) {
+    if (!this.#bearItems[id]) {
+      const bear = await getBearById(id)
+      console.log({ bear })
+      if (bear) {
+        this.#bearItems[id] = bear
+      }
+    }
+    return this.#bearItems[id]
   }
 
   /**
