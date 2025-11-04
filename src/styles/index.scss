@@ -99,6 +99,33 @@
   }
 }
 
+#type-selector {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  @include textSize("sm");
+  padding-inline: 10px;
+  border-radius: 6px;
+  background-color: #e4e4e4;
+  height: 32px;
+  border: none;
+  color: #454545;
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-image: url("/img/chevron.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 4px;
+    width: 12px;
+  }
+}
+
 .list {
   @include grid(4);
 }
