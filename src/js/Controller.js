@@ -1,5 +1,5 @@
 import store from "./Store"
-import { parseSearchParams, getSP, setSP } from "./utils/url"
+import { getSP, setSP } from "./utils/url"
 
 class Controller {
   #view
@@ -22,12 +22,10 @@ class Controller {
       this.#loadBearList()
     })
     this.#view.bind("acceptBear", (e) => {
-      store.acceptBear(this.#cardId(e))
-      this.#loadBearList()
+      this.#updateBear(this.#cardId(e), "accept")
     })
     this.#view.bind("rejectBear", (e) => {
-      store.rejectBear(this.#cardId(e))
-      this.#loadBearList()
+      this.#updateBear(this.#cardId(e), "reject")
     })
     this.#view.bind("openModal", (e) => {
       setSP("open", this.#cardId(e))
@@ -78,30 +76,45 @@ class Controller {
   }
 
   async #loadBearList() {
-    this.#view.render(
-      "bearList",
-      (await store.getBears()).filter((item) => {
-        const { reserve, selection, opened } = parseSearchParams()
-        if (reserve && !item.in_reserve) {
-          return false
-        }
-
-        if (!selection || selection === "incoming") {
-          const { accepted, rejected } = store.getBearStatusList()
-          const excludedList = [...accepted, ...rejected]
-          if (excludedList.some((excludedId) => excludedId === item.id)) {
-            return false
-          }
-        }
-        return true
-      })
+    store.getBears(
+      { reserve: getSP("reserve") === "true", selection: getSP("selection") },
+      (list) => {
+        this.#view.render("bearList", list)
+      }
     )
   }
 
   async #loadModal() {
     const id = getSP("open")
-    this.#view.render("modal", id ? await store.getBear(id) : undefined)
-    this.#view.render("modalState", id)
+    store.getBear(id, (bear) => {
+      this.#view.render("modal", bear)
+      this.#view.render("modalState", id)
+    })
+  }
+
+  /**
+   *
+   * @param {number} id
+   * @param {"accept" | "reject"} type
+   */
+  async #updateBear(id, type) {
+    if (type === "accept") {
+      store.acceptBear(id, (isSuccess) => {
+        if (!isSuccess) {
+          alert("Failed to update. Please try again later")
+        } else {
+          this.#loadBearList()
+        }
+      })
+    } else if (type === "reject") {
+      store.rejectBear(id, (isSuccess) => {
+        if (!isSuccess) {
+          alert("Failed to update. Please try again later")
+        } else {
+          this.#loadBearList()
+        }
+      })
+    }
   }
 }
 

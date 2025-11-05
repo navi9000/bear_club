@@ -15,6 +15,7 @@ class View {
     switch (viewName) {
       case "pageTitle":
         this.$pageTitle.innerHTML = Template.renderPageTitle(value)
+        break
       case "reserveCheckbox":
         this.$isReserve.checked = value
         this.$customCheckbox.classList = `customcheckbox${
@@ -58,7 +59,7 @@ class View {
         delegate(this.$bearList, "[data-type='reject']", "click", handler)
         break
       case "openModal":
-        delegate(this.$bearList, ".card", "click", handler)
+        delegate(this.$bearList, ".card", "dblclick", handler)
         break
       case "closeModalAccept":
         delegate(this.$modal, "[data-type='accept']", "click", handler)

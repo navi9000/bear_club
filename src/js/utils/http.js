@@ -56,7 +56,6 @@ async function mutation(endpoint, params = {}, method = "POST") {
       message = "Unknown error"
     }
     console.error(message)
-    return null
   }
 }
 
@@ -69,7 +68,6 @@ export async function getBears() {
     const data = serverData.results.data
     return data
   }
-  return null
 }
 
 /**
@@ -85,7 +83,6 @@ export async function getBearById(id) {
     const data = serverData.data
     return data
   }
-  return null
 }
 
 /**

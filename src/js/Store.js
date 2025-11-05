@@ -18,37 +18,78 @@ class Store {
     rejected: [],
   }
 
-  async getBears() {
+  /**
+   *
+   * @param {object} query
+   * @param {function} callback
+   */
+  async getBears(query, callback) {
     if (!this.#bearList) {
-      const bearList = await getBears()
-      if (bearList) {
-        this.#bearList = bearList
-      }
+      this.#bearList = await getBears()
     }
-    return this.#bearList
-  }
-
-  async getBear(id) {
-    if (!this.#bearItems[id]) {
-      const bear = await getBearById(id)
-      console.log({ bear })
-      if (bear) {
-        this.#bearItems[id] = bear
-      }
-    }
-    return this.#bearItems[id]
+    console.log({ bs: this.#bearStatus })
+    callback.call(
+      this,
+      this.#bearList
+        ?.filter((item) => {
+          if (query.reserve && !item.in_reserve) {
+            return false
+          }
+          return true
+        })
+        .filter((item) => {
+          if (query.selection === "accepted") {
+            return this.#bearStatus.accepted.includes(item.id)
+          } else if (query.selection === "rejected") {
+            return this.#bearStatus.rejected.includes(item.id)
+          } else {
+            return ![
+              ...this.#bearStatus.accepted,
+              ...this.#bearStatus.rejected,
+            ].includes(item.id)
+          }
+        })
+    )
   }
 
   /**
    *
    * @param {number} id
+   * @param {function} callback
    */
-  async acceptBear(id) {
-    this.#bearStatus.accepted = [...this.#bearStatus.accepted, id]
+  async getBear(id, callback) {
+    if (!this.#bearItems[id]) {
+      this.#bearItems[id] = await getBearById(id)
+    }
+    callback.call(this, this.#bearItems[id])
   }
 
-  async rejectBear(id) {
-    this.#bearStatus.rejected = [...this.#bearStatus.rejected, id]
+  /**
+   *
+   * @param {number} id
+   * @param {function} callback
+   */
+  async acceptBear(id, callback) {
+    const result = await acceptBear(id)
+    const isSuccess = result?.success
+    if (isSuccess) {
+      this.#bearStatus.accepted = [...this.#bearStatus.accepted, id]
+    }
+    callback.call(this, isSuccess)
+  }
+
+  /**
+   *
+   * @param {number} id
+   * @param {function} callback
+   */
+  async rejectBear(id, callback) {
+    const result = await rejectBear(id)
+    const isSuccess = result?.success
+    if (isSuccess) {
+      this.#bearStatus.rejected = [...this.#bearStatus.rejected, id]
+    }
+    callback.call(this, isSuccess)
   }
 
   getBearStatusList() {
