@@ -32,15 +32,15 @@ class Store {
       this,
       this.#bearList
         ?.filter((item) => {
-          if (query.reserve && !item.in_reserve) {
+          if (query?.reserve && !item.in_reserve) {
             return false
           }
           return true
         })
         .filter((item) => {
-          if (query.selection === "accepted") {
+          if (query?.selection === "accepted") {
             return this.#bearStatus.accepted.includes(item.id)
-          } else if (query.selection === "rejected") {
+          } else if (query?.selection === "rejected") {
             return this.#bearStatus.rejected.includes(item.id)
           } else {
             return ![

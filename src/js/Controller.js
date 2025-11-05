@@ -10,71 +10,53 @@ class Controller {
   constructor(view) {
     this.#view = view
 
-    this.#view.bind("toggleReserve", (e) => {
-      setSP("reserve", e.target.checked)
-      this.#loadCheckbox()
-      this.#loadBearList()
+    this.#view.bind("toggleReserve", (params) => {
+      this.#toggleReserve(params)
     })
-    this.#view.bind("selectType", (e) => {
-      setSP("selection", e.target.value)
-      this.#loadPageTitle()
-      this.#loadCheckbox()
-      this.#loadBearList()
+    this.#view.bind("selectType", (params) => {
+      this.#selectType(params)
     })
-    this.#view.bind("acceptBear", (e) => {
-      this.#updateBear(this.#cardId(e), "accept")
+    this.#view.bind("acceptBear", (id) => {
+      this.#acceptBear(id)
     })
-    this.#view.bind("rejectBear", (e) => {
-      this.#updateBear(this.#cardId(e), "reject")
+    this.#view.bind("rejectBear", (id) => {
+      this.#rejectBear(id)
     })
-    this.#view.bind("openModal", (e) => {
-      setSP("open", this.#cardId(e))
-      this.#loadModal()
+    this.#view.bind("openModal", (id) => {
+      this.#openModal(id)
     })
-    this.#view.bind("closeModalAccept", () => {
-      store.acceptBear(+getSP("open"))
-      setSP("open", null)
-      this.#loadModal()
-      this.#loadBearList()
+    this.#view.bind("closeModalAccept", (params) => {
+      this.#closeModalAccept(params)
     })
-    this.#view.bind("closeModalReject", () => {
-      store.rejectBear(+getSP("open"))
-      setSP("open", null)
-      this.#loadModal()
-      this.#loadBearList()
+    this.#view.bind("closeModalReject", (params) => {
+      this.#closeModalReject(params)
     })
     this.#view.bind("closeModalCancel", () => {
-      setSP("open", null)
-      this.#loadModal()
+      this.#closeModalCancel()
     })
   }
 
   async init() {
-    this.#loadPageTitle()
-    this.#loadCheckbox()
-    this.#loadTypeSelector()
-    this.#loadBearList()
-    this.#loadModal()
+    const selection = getSP("selection")
+    const reserve = getSP("reserve") === "true"
+    const openID = getSP("open")
+
+    this.#view.render("pageTitle", selection)
+    this.#view.render("reserveCheckbox", reserve)
+    this.#view.render("typeSelector", selection)
+    store.getBears({ reserve, selection }, (list) => {
+      this.#view.render("bearList", list)
+      if (openID) {
+        store.getBear(openID, (bear) => {
+          this.#view.render("modal", bear)
+        })
+      }
+    })
   }
 
-  #cardId(event) {
-    const card = event.target.closest(".card")
-    const id = card.attributes["data-id"].value
-    return +id
-  }
-
-  async #loadPageTitle() {
-    this.#view.render("pageTitle", getSP("selection"))
-  }
-
-  async #loadCheckbox() {
-    this.#view.render("reserveCheckbox", getSP("reserve") === "true")
-  }
-
-  async #loadTypeSelector() {
-    this.#view.render("typeSelector", getSP("selection") ?? "incoming")
-  }
-
+  /**
+   * @deprecated
+   */
   async #loadBearList() {
     store.getBears(
       { reserve: getSP("reserve") === "true", selection: getSP("selection") },
@@ -84,37 +66,74 @@ class Controller {
     )
   }
 
-  async #loadModal() {
-    const id = getSP("open")
-    store.getBear(id, (bear) => {
-      this.#view.render("modal", bear)
-      this.#view.render("modalState", id)
+  async #toggleReserve({ reserve, selection }) {
+    this.#view.render("reserveCheckbox", reserve)
+    store.getBears({ reserve, selection }, (list) => {
+      this.#view.render("bearList", list)
     })
   }
 
-  /**
-   *
-   * @param {number} id
-   * @param {"accept" | "reject"} type
-   */
-  async #updateBear(id, type) {
-    if (type === "accept") {
-      store.acceptBear(id, (isSuccess) => {
-        if (!isSuccess) {
-          alert("Failed to update. Please try again later")
-        } else {
-          this.#loadBearList()
-        }
-      })
-    } else if (type === "reject") {
-      store.rejectBear(id, (isSuccess) => {
-        if (!isSuccess) {
-          alert("Failed to update. Please try again later")
-        } else {
-          this.#loadBearList()
-        }
-      })
-    }
+  async #selectType({ reserve, selection }) {
+    this.#view.render("pageTitle", selection)
+    store.getBears({ reserve, selection }, (list) => {
+      this.#view.render("bearList", list)
+    })
+  }
+
+  async #acceptBear(id) {
+    store.acceptBear(id, (isSuccess) => {
+      if (!isSuccess) {
+        alert("Failed to update. Please try again later")
+      } else {
+        this.#loadBearList()
+      }
+    })
+  }
+
+  async #rejectBear(id) {
+    store.rejectBear(id, (isSuccess) => {
+      if (!isSuccess) {
+        alert("Failed to update. Please try again later")
+      } else {
+        this.#loadBearList()
+      }
+    })
+  }
+
+  async #openModal(id) {
+    store.getBear(id, (bear) => {
+      this.#view.render("modal", bear)
+    })
+  }
+
+  async #closeModalAccept({ id, reserve }) {
+    store.acceptBear(id, (isSuccess) => {
+      if (!isSuccess) {
+        alert("Failed to update. Please try again later")
+      } else {
+        store.getBears({ reserve }, (list) => {
+          this.#view.render("bearList", list)
+          this.#view.render("modal", undefined)
+        })
+      }
+    })
+  }
+
+  async #closeModalReject(id) {
+    store.rejectBear(id, (isSuccess) => {
+      if (!isSuccess) {
+        alert("Failed to update. Please try again later")
+      } else {
+        store.getBears({ reserve }, (list) => {
+          this.#view.render("bearList", list)
+          this.#view.render("modal", undefined)
+        })
+      }
+    })
+  }
+
+  #closeModalCancel() {
+    this.#view.render("modal", undefined)
   }
 }
 
