@@ -1,6 +1,7 @@
 import { qs, on, delegate } from "./utils/dom"
 import Template from "./Template"
 import { getSP, setSP } from "./utils/url"
+import "./utils/types"
 
 class View {
   constructor() {
@@ -12,7 +13,12 @@ class View {
     this.$modal = qs(".modal")
   }
 
-  render(viewName, value) {
+  /**
+   *
+   * @param {ViewName} viewName
+   * @param {any} value
+   */
+  render(viewName, value = undefined) {
     switch (viewName) {
       case "pageTitle":
         this.$pageTitle.innerHTML = Template.renderPageTitle(value)
@@ -38,11 +44,22 @@ class View {
           this.$modal.close()
         }
         break
+      case "removeCard":
+        this.#removeCard(value)
+        break
+      case "alert":
+        alert("Failed to update. Please try again later.")
+        break
       default:
         console.warn("Unknown view: ", viewName)
     }
   }
 
+  /**
+   *
+   * @param {ProjectEvent} event
+   * @param {function} handler
+   */
   bind(event, handler) {
     switch (event) {
       case "toggleReserve":
@@ -82,18 +99,12 @@ class View {
         break
       case "closeModalAccept":
         delegate(this.$modal, "[data-type='accept']", "click", () => {
-          handler({
-            id: this.#modalId(),
-            reserve: getSP("reserve") === "true",
-          })
+          handler(this.#modalId())
         })
         break
       case "closeModalReject":
         delegate(this.$modal, "[data-type='reject']", "click", () => {
-          handler({
-            id: this.#modalId(),
-            reserve: getSP("reserve") === "true",
-          })
+          handler(this.#modalId())
         })
         break
       case "closeModalCancel":
@@ -130,6 +141,9 @@ class View {
     }
   }
 
+  /**
+   * @param {Event} event
+   */
   #cardId(event) {
     const card = event.target.closest(".card")
     const id = card.attributes["data-id"].value
@@ -140,6 +154,17 @@ class View {
     const id = getSP("open")
     if (id) {
       return +id
+    }
+  }
+
+  /**
+   *
+   * @param {number} id
+   */
+  #removeCard(id) {
+    const elem = qs(`.card[data-id="${id}"]`)
+    if (elem) {
+      this.$bearList.removeChild(elem)
     }
   }
 }

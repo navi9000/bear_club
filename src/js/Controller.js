@@ -1,5 +1,5 @@
 import store from "./Store"
-import { getSP, setSP } from "./utils/url"
+import { getSP } from "./utils/url"
 
 class Controller {
   #view
@@ -37,7 +37,7 @@ class Controller {
   }
 
   async init() {
-    const selection = getSP("selection")
+    const selection = getSP("selection") ?? "incoming"
     const reserve = getSP("reserve") === "true"
     const openID = getSP("open")
 
@@ -52,18 +52,6 @@ class Controller {
         })
       }
     })
-  }
-
-  /**
-   * @deprecated
-   */
-  async #loadBearList() {
-    store.getBears(
-      { reserve: getSP("reserve") === "true", selection: getSP("selection") },
-      (list) => {
-        this.#view.render("bearList", list)
-      }
-    )
   }
 
   async #toggleReserve({ reserve, selection }) {
@@ -85,7 +73,7 @@ class Controller {
       if (!isSuccess) {
         alert("Failed to update. Please try again later")
       } else {
-        this.#loadBearList()
+        this.#view.render("removeCard", id)
       }
     })
   }
@@ -93,9 +81,9 @@ class Controller {
   async #rejectBear(id) {
     store.rejectBear(id, (isSuccess) => {
       if (!isSuccess) {
-        alert("Failed to update. Please try again later")
+        this.#view.render("alert")
       } else {
-        this.#loadBearList()
+        this.#view.render("removeCard", id)
       }
     })
   }
@@ -106,15 +94,13 @@ class Controller {
     })
   }
 
-  async #closeModalAccept({ id, reserve }) {
+  async #closeModalAccept(id) {
     store.acceptBear(id, (isSuccess) => {
       if (!isSuccess) {
-        alert("Failed to update. Please try again later")
+        this.#view.render("alert")
       } else {
-        store.getBears({ reserve }, (list) => {
-          this.#view.render("bearList", list)
-          this.#view.render("modal", undefined)
-        })
+        this.#view.render("removeCard", id)
+        this.#view.render("modal", undefined)
       }
     })
   }
@@ -122,12 +108,10 @@ class Controller {
   async #closeModalReject(id) {
     store.rejectBear(id, (isSuccess) => {
       if (!isSuccess) {
-        alert("Failed to update. Please try again later")
+        this.#view.render("alert")
       } else {
-        store.getBears({ reserve }, (list) => {
-          this.#view.render("bearList", list)
-          this.#view.render("modal", undefined)
-        })
+        this.#view.render("removeCard", id)
+        this.#view.render("modal", undefined)
       }
     })
   }

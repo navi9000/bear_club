@@ -8,3 +8,11 @@
  * @property {string} gender
  * @property {boolean} in_reserve
  */
+
+/**
+ * @typedef {"pageTitle" | "reserveCheckbox" | "typeSelector" | "bearList" | "modal" | "removeCard" | "alert"} ViewName
+ */
+
+/**
+ * @typedef {"toggleReserve" | "selectType" | "acceptBear" | "rejectBear" | "openModal" | "closeModalAccept" | "closeModalReject" | "closeModalCancel"} ProjectEvent
+ */
