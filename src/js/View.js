@@ -131,11 +131,13 @@ class View {
 
   /**
    *
-   * @param {Bear=} bear
+   * @param {Bear | "error" | null} bear
    */
   #getModal(bear) {
     if (!bear) {
       return ""
+    } else if (bear === "error") {
+      return Template.renderModalError()
     } else {
       return Template.renderModal(bear)
     }

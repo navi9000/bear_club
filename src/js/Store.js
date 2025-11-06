@@ -90,10 +90,6 @@ class Store {
     }
     callback.call(this, isSuccess)
   }
-
-  getBearStatusList() {
-    return this.#bearStatus
-  }
 }
 
 export default new Store()

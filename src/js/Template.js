@@ -64,6 +64,21 @@ export default class Template {
     `
   }
 
+  static #ModalTemplateError() {
+    return `
+      <div class="modal__inlaywrapper">
+        <div class="modal__inlay modal__inlay_default">
+          <div class="modal__datawrapper">
+            <div class="modal__linewrapper">
+              <p>Не удалось загрузить данные. Попробуйте позже.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="cancel-button"></button>
+    `
+  }
+
   static #ModalButtonWrapperTemplate() {
     return `
       <div class="modal__buttonwrapper">
@@ -158,6 +173,10 @@ export default class Template {
       .replace("{{button_wrapper}}", this.renderModalButtons(in_reserve))
 
     return modalTemplate
+  }
+
+  static renderModalError() {
+    return this.#ModalTemplateError()
   }
 
   /**

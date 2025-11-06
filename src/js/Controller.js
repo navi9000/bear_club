@@ -21,7 +21,7 @@ class Controller {
     this.#view.bind("closeModalCancel", this.#closeModalCancel.bind(this))
   }
 
-  async init() {
+  init() {
     const selection = getSP("selection") ?? "incoming"
     const reserve = getSP("reserve") === "true"
     const openID = getSP("open")
@@ -39,21 +39,21 @@ class Controller {
     })
   }
 
-  async #toggleReserve({ reserve, selection }) {
+  #toggleReserve({ reserve, selection }) {
     this.#view.render("reserveCheckbox", reserve)
     this.#model.read({ reserve, selection }, (list) => {
       this.#view.render("bearList", list)
     })
   }
 
-  async #selectType({ reserve, selection }) {
+  #selectType({ reserve, selection }) {
     this.#view.render("pageTitle", selection)
     this.#model.read({ reserve, selection }, (list) => {
       this.#view.render("bearList", list)
     })
   }
 
-  async #acceptBear(id) {
+  #acceptBear(id) {
     this.#model.update(id, "accept", (isSuccess) => {
       if (!isSuccess) {
         this.#view.render("alert")
@@ -63,7 +63,7 @@ class Controller {
     })
   }
 
-  async #rejectBear(id) {
+  #rejectBear(id) {
     this.#model.update(id, "reject", (isSuccess) => {
       if (!isSuccess) {
         this.#view.render("alert")
@@ -73,36 +73,36 @@ class Controller {
     })
   }
 
-  async #openModal(id) {
+  #openModal(id) {
     this.#model.read(id, (bear) => {
-      this.#view.render("modal", bear)
+      this.#view.render("modal", bear ?? "error")
     })
   }
 
-  async #closeModalAccept(id) {
+  #closeModalAccept(id) {
     this.#model.update(id, "accept", (isSuccess) => {
       if (!isSuccess) {
         this.#view.render("alert")
       } else {
         this.#view.render("removeCard", id)
-        this.#view.render("modal", undefined)
+        this.#view.render("modal", null)
       }
     })
   }
 
-  async #closeModalReject(id) {
+  #closeModalReject(id) {
     this.#model.update(id, "reject", (isSuccess) => {
       if (!isSuccess) {
         this.#view.render("alert")
       } else {
         this.#view.render("removeCard", id)
-        this.#view.render("modal", undefined)
+        this.#view.render("modal", null)
       }
     })
   }
 
   #closeModalCancel() {
-    this.#view.render("modal", undefined)
+    this.#view.render("modal", null)
   }
 }
 
