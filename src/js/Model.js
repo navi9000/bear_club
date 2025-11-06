@@ -11,7 +11,7 @@ class Model {
     if (typeof params === "string" || typeof params === "number") {
       const id = +params
       if (isNaN(id)) {
-        console.warn(`Invalid id: ${params}`)
+        console.error(`Invalid id: ${params}`)
         return
       }
       store.getBear(id, callback)
@@ -31,7 +31,7 @@ class Model {
   update(id, type, callback) {
     const idAsNum = +id
     if (isNaN(idAsNum)) {
-      console.warn(`Invalid id: ${params}`)
+      console.error(`Invalid id: ${id}`)
       return
     }
     if (type === "accept") {
