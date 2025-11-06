@@ -156,6 +156,8 @@
     overflow: hidden;
     background-color: var(--card-bg-color);
     transition: box-shadow 300ms;
+    display: flex;
+    flex-direction: column;
     &:hover {
       box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.26);
     }
@@ -165,6 +167,7 @@
     height: 146px;
     width: 100%;
     position: relative;
+    flex-grow: 0;
 
     img {
       object-fit: cover;
@@ -190,6 +193,8 @@
   &__datawrapper {
     @include centered();
     @include padding("md");
+    justify-content: center;
+    flex-grow: 1;
     height: 100%;
     gap: 24px;
   }

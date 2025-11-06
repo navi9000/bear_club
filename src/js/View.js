@@ -117,29 +117,32 @@ class View {
 
   /**
    *
-   * @param {[Bear]=} value
+   * @param {{list: [Bear], selection: string}=} value
    */
   #getBearList(value) {
     if (!value) {
       return Template.renderListError()
-    } else if (value.length === 0) {
+    } else if (value.list.length === 0) {
       return Template.renderEmptyList()
     } else {
-      return value.map((item) => Template.renderCard(item)).join("")
+      const showButtons = !["accepted", "rejected"].includes(value.selection)
+      return value.list
+        .map((item) => Template.renderCard(item, showButtons))
+        .join("")
     }
   }
 
   /**
    *
-   * @param {Bear | "error" | null} bear
+   * @param {{bear: Bear, selection: string} | "error" | null} data
    */
-  #getModal(bear) {
-    if (!bear) {
+  #getModal(data) {
+    if (!data) {
       return ""
-    } else if (bear === "error") {
+    } else if (data === "error") {
       return Template.renderModalError()
     } else {
-      return Template.renderModal(bear)
+      return Template.renderModal(data.bear, data.selection === "incoming")
     }
   }
 

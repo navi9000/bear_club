@@ -30,10 +30,10 @@ class Controller {
     this.#view.render("reserveCheckbox", reserve)
     this.#view.render("typeSelector", selection)
     this.#model.read({ reserve, selection }, (list) => {
-      this.#view.render("bearList", list)
+      this.#view.render("bearList", { list, selection })
       if (openID) {
         this.#model.read(openID, (bear) => {
-          this.#view.render("modal", bear)
+          this.#view.render("modal", bear ? { bear, selection } : "error")
         })
       }
     })
@@ -42,14 +42,14 @@ class Controller {
   #toggleReserve({ reserve, selection }) {
     this.#view.render("reserveCheckbox", reserve)
     this.#model.read({ reserve, selection }, (list) => {
-      this.#view.render("bearList", list)
+      this.#view.render("bearList", { list, selection })
     })
   }
 
   #selectType({ reserve, selection }) {
     this.#view.render("pageTitle", selection)
     this.#model.read({ reserve, selection }, (list) => {
-      this.#view.render("bearList", list)
+      this.#view.render("bearList", { list, selection })
     })
   }
 
@@ -74,8 +74,10 @@ class Controller {
   }
 
   #openModal(id) {
+    const selection = getSP("selection") ?? "incoming"
+
     this.#model.read(id, (bear) => {
-      this.#view.render("modal", bear ?? "error")
+      this.#view.render("modal", bear ? { bear, selection } : "error")
     })
   }
 

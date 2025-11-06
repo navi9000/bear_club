@@ -30,39 +30,7 @@ export function setSP(name, value) {
  *
  * @param {string} name
  */
-function getSearchParam(name) {
-  const searchParams = new URLSearchParams(window.location.search)
-  const value = searchParams.get(name)
-  if (value === "true") {
-    return true
-  } else if (!isNaN(+value)) {
-    return +value
-  } else if (new RegExp(",").test(value)) {
-    const valueAsArr = value.split(",").map((item) => {
-      if (!isNaN(+item)) {
-        return +item
-      }
-      return item
-    })
-    return valueAsArr
-  } else {
-    return null
-  }
-}
-
-/**
- *
- * @param {string} name
- */
 export function getSP(name) {
   const searchParams = new URLSearchParams(window.location.search)
   return searchParams.get(name)
-}
-
-export function parseSearchParams() {
-  return {
-    reserve: getSearchParam("reserve"),
-    selection: getSearchParam("selection"),
-    opened: getSearchParam("opened"),
-  }
 }

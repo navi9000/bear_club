@@ -91,8 +91,12 @@ export default class Template {
   /**
    *
    * @param {Bear} bear
+   * @param {boolean} showButtons
    */
-  static renderCard({ id, image_url, name, type, gender, in_reserve }) {
+  static renderCard(
+    { id, image_url, name, type, gender, in_reserve },
+    showButtons
+  ) {
     let cardTemplate = this.#CardTemplate()
       .replace("{{id}}", id.toString())
       .replace("{{card_style}}", in_reserve ? "card_inreserve" : "card_default")
@@ -106,8 +110,10 @@ export default class Template {
       .replace("{{name}}", name)
       .replace("{{type}}", type)
       .replace("{{gender}}", gender)
-      // позже будет условие
-      .replace("{{button_wrapper}}", this.renderCardButtons(in_reserve))
+      .replace(
+        "{{button_wrapper}}",
+        showButtons ? this.renderCardButtons(in_reserve) : ""
+      )
 
     return cardTemplate
   }
@@ -151,8 +157,12 @@ export default class Template {
 
   /**
    * @param {Bear} bear
+   * @param {boolean} showButtons
    */
-  static renderModal({ image_url, name, type, gender, in_reserve, text }) {
+  static renderModal(
+    { image_url, name, type, gender, in_reserve, text },
+    showButtons
+  ) {
     let modalTemplate = this.#ModalTemplate()
       .replace(
         "{{inlay_style}}",
@@ -169,8 +179,10 @@ export default class Template {
       .replace("{{type}}", type)
       .replace("{{gender}}", gender)
       .replace("{{description}}", text ?? "Нет описания")
-      // позже будет условие
-      .replace("{{button_wrapper}}", this.renderModalButtons(in_reserve))
+      .replace(
+        "{{button_wrapper}}",
+        showButtons ? this.renderModalButtons(in_reserve) : ""
+      )
 
     return modalTemplate
   }
