@@ -1,39 +1,24 @@
-import store from "./Store"
 import { getSP } from "./utils/url"
 
 class Controller {
+  #model
   #view
   /**
-   *
+   * @param {import ("./Model").default} model
    * @param {import("./View").default} view
    */
-  constructor(view) {
+  constructor(model, view) {
+    this.#model = model
     this.#view = view
 
-    this.#view.bind("toggleReserve", (params) => {
-      this.#toggleReserve(params)
-    })
-    this.#view.bind("selectType", (params) => {
-      this.#selectType(params)
-    })
-    this.#view.bind("acceptBear", (id) => {
-      this.#acceptBear(id)
-    })
-    this.#view.bind("rejectBear", (id) => {
-      this.#rejectBear(id)
-    })
-    this.#view.bind("openModal", (id) => {
-      this.#openModal(id)
-    })
-    this.#view.bind("closeModalAccept", (params) => {
-      this.#closeModalAccept(params)
-    })
-    this.#view.bind("closeModalReject", (params) => {
-      this.#closeModalReject(params)
-    })
-    this.#view.bind("closeModalCancel", () => {
-      this.#closeModalCancel()
-    })
+    this.#view.bind("toggleReserve", this.#toggleReserve.bind(this))
+    this.#view.bind("selectType", this.#selectType.bind(this))
+    this.#view.bind("acceptBear", this.#acceptBear.bind(this))
+    this.#view.bind("rejectBear", this.#rejectBear.bind(this))
+    this.#view.bind("openModal", this.#openModal.bind(this))
+    this.#view.bind("closeModalAccept", this.#closeModalAccept.bind(this))
+    this.#view.bind("closeModalReject", this.#closeModalReject.bind(this))
+    this.#view.bind("closeModalCancel", this.#closeModalCancel.bind(this))
   }
 
   async init() {
@@ -44,10 +29,10 @@ class Controller {
     this.#view.render("pageTitle", selection)
     this.#view.render("reserveCheckbox", reserve)
     this.#view.render("typeSelector", selection)
-    store.getBears({ reserve, selection }, (list) => {
+    this.#model.read({ reserve, selection }, (list) => {
       this.#view.render("bearList", list)
       if (openID) {
-        store.getBear(openID, (bear) => {
+        this.#model.read(openID, (bear) => {
           this.#view.render("modal", bear)
         })
       }
@@ -56,22 +41,22 @@ class Controller {
 
   async #toggleReserve({ reserve, selection }) {
     this.#view.render("reserveCheckbox", reserve)
-    store.getBears({ reserve, selection }, (list) => {
+    this.#model.read({ reserve, selection }, (list) => {
       this.#view.render("bearList", list)
     })
   }
 
   async #selectType({ reserve, selection }) {
     this.#view.render("pageTitle", selection)
-    store.getBears({ reserve, selection }, (list) => {
+    this.#model.read({ reserve, selection }, (list) => {
       this.#view.render("bearList", list)
     })
   }
 
   async #acceptBear(id) {
-    store.acceptBear(id, (isSuccess) => {
+    this.#model.update(id, "accept", (isSuccess) => {
       if (!isSuccess) {
-        alert("Failed to update. Please try again later")
+        this.#view.render("alert")
       } else {
         this.#view.render("removeCard", id)
       }
@@ -79,7 +64,7 @@ class Controller {
   }
 
   async #rejectBear(id) {
-    store.rejectBear(id, (isSuccess) => {
+    this.#model.update(id, "reject", (isSuccess) => {
       if (!isSuccess) {
         this.#view.render("alert")
       } else {
@@ -89,13 +74,13 @@ class Controller {
   }
 
   async #openModal(id) {
-    store.getBear(id, (bear) => {
+    this.#model.read(id, (bear) => {
       this.#view.render("modal", bear)
     })
   }
 
   async #closeModalAccept(id) {
-    store.acceptBear(id, (isSuccess) => {
+    this.#model.update(id, "accept", (isSuccess) => {
       if (!isSuccess) {
         this.#view.render("alert")
       } else {
@@ -106,7 +91,7 @@ class Controller {
   }
 
   async #closeModalReject(id) {
-    store.rejectBear(id, (isSuccess) => {
+    this.#model.update(id, "reject", (isSuccess) => {
       if (!isSuccess) {
         this.#view.render("alert")
       } else {

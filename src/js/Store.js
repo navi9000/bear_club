@@ -27,7 +27,6 @@ class Store {
     if (!this.#bearList) {
       this.#bearList = await getBears()
     }
-    console.log({ bs: this.#bearStatus })
     callback.call(
       this,
       this.#bearList

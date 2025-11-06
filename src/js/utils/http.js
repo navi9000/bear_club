@@ -24,7 +24,6 @@ async function query(endpoint, isSecondServer = false) {
     } else {
       message = "Unknown error"
     }
-    console.log(message)
     return null
   }
 }
