@@ -19,6 +19,7 @@ class Controller {
     this.#view.bind("closeModalAccept", this.#closeModalAccept.bind(this))
     this.#view.bind("closeModalReject", this.#closeModalReject.bind(this))
     this.#view.bind("closeModalCancel", this.#closeModalCancel.bind(this))
+    this.#view.bind("clickLogo", this.init.bind(this))
   }
 
   init() {

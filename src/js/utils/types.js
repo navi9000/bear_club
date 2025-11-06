@@ -14,5 +14,5 @@
  */
 
 /**
- * @typedef {"toggleReserve" | "selectType" | "acceptBear" | "rejectBear" | "openModal" | "closeModalAccept" | "closeModalReject" | "closeModalCancel"} ProjectEvent
+ * @typedef {"toggleReserve" | "selectType" | "acceptBear" | "rejectBear" | "openModal" | "closeModalAccept" | "closeModalReject" | "closeModalCancel" | "clickLogo"} ProjectEvent
  */

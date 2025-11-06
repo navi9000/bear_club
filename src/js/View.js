@@ -11,6 +11,7 @@ class View {
     this.$group = qs("#type-selector")
     this.$bearList = qs(".list")
     this.$modal = qs(".modal")
+    this.$logo = qs(".logo")
   }
 
   /**
@@ -110,6 +111,12 @@ class View {
       case "closeModalCancel":
         delegate(this.$modal, ".cancel-button", "click", handler)
         break
+      case "clickLogo":
+        on(this.$logo, "click", () => {
+          setSP("reserve", null)
+          setSP("selection", null)
+          handler()
+        })
       default:
         console.warn("Unknown event: ", event)
     }
