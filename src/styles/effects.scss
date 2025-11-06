@@ -13,3 +13,11 @@
     pointer-events: none;
   }
 }
+
+@mixin customPointer() {
+  cursor: url("/img/pointer.svg"), pointer;
+}
+
+@mixin dblclickPointer() {
+  cursor: url("/img/dblclick.png"), pointer;
+}
