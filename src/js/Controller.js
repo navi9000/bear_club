@@ -1,4 +1,4 @@
-import { getSP } from "./utils/url"
+import { parseSP } from "./utils/url"
 
 class Controller {
   #model
@@ -23,9 +23,9 @@ class Controller {
   }
 
   init() {
-    const selection = getSP("selection") ?? "incoming"
-    const reserve = getSP("reserve") === "true"
-    const openID = getSP("open")
+    const selection = parseSP("selection")
+    const reserve = parseSP("reserve")
+    const openID = parseSP("open")
 
     this.#view.render("pageTitle", selection)
     this.#view.render("reserveCheckbox", reserve)
@@ -75,7 +75,7 @@ class Controller {
   }
 
   #openModal(id) {
-    const selection = getSP("selection") ?? "incoming"
+    const selection = parseSP("selection")
 
     this.#model.read(id, (bear) => {
       this.#view.render("modal", bear ? { bear, selection } : "error")

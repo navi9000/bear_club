@@ -1,6 +1,6 @@
 import { qs, on, delegate } from "./utils/dom"
 import Template from "./Template"
-import { getSP, setSP } from "./utils/url"
+import { setSP, parseSP } from "./utils/url"
 import "./utils/types"
 
 class View {
@@ -69,7 +69,7 @@ class View {
           setSP("reserve", reserve)
           handler({
             reserve,
-            selection: getSP("selection"),
+            selection: parseSP("selection"),
           })
         })
         break
@@ -78,7 +78,7 @@ class View {
           const selection = e.target.value
           setSP("selection", selection)
           handler({
-            reserve: getSP("reserve") === "true",
+            reserve: parseSP("reserve"),
             selection,
           })
         })
@@ -102,12 +102,12 @@ class View {
         break
       case "closeModalAccept":
         delegate(this.$modal, "[data-type='accept']", "click", () => {
-          handler(this.#modalId())
+          handler(parseSP("open"))
         })
         break
       case "closeModalReject":
         delegate(this.$modal, "[data-type='reject']", "click", () => {
-          handler(this.#modalId())
+          handler(parseSP("open"))
         })
         break
       case "closeModalCancel":
@@ -162,13 +162,6 @@ class View {
     const card = event.target.closest(".card")
     const id = card.attributes["data-id"].value
     return +id
-  }
-
-  #modalId() {
-    const id = getSP("open")
-    if (id) {
-      return +id
-    }
   }
 
   /**

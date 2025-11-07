@@ -16,3 +16,11 @@
 /**
  * @typedef {"toggleReserve" | "selectType" | "acceptBear" | "rejectBear" | "openModal" | "closeModalAccept" | "closeModalReject" | "closeModalCancel" | "clickLogo"} ProjectEvent
  */
+
+/**
+ * @typedef {"incoming" | "accepted" | "rejected"} BearGroup
+ */
+
+/**
+ * @typedef {"reserve" | "selection" | "open"} ProjectSearchParam
+ */
