@@ -37,11 +37,11 @@ class View {
         this.$bearList.innerHTML = this.#getBearList(value)
         break
       case "modal":
-        setSP("open", value?.id)
         this.$modal.innerHTML = this.#getModal(value)
         if (value) {
           this.$modal.showModal()
         } else {
+          setSP("open", null)
           this.$modal.close()
         }
         break
@@ -95,7 +95,9 @@ class View {
         break
       case "openModal":
         delegate(this.$bearList, ".card", "dblclick", (e) => {
-          handler(this.#cardId(e))
+          const id = this.#cardId(e)
+          setSP("open", id)
+          handler(id)
         })
         break
       case "closeModalAccept":
