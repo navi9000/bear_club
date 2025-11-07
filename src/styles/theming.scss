@@ -2,3 +2,36 @@
   background-color: #0e4447;
   color: #f4f4f4;
 }
+
+@mixin theme($theme) {
+  @if ($theme == "fringe") {
+    background-color: #0e4447;
+    color: #f4f4f4;
+  }
+  @if ($theme == "no-bg") {
+    background-color: transparent;
+  }
+  @if ($theme == "input") {
+    background-color: #e4e4e4;
+    color: #454545;
+  }
+  @if ($theme == "inreserve-label") {
+    background: linear-gradient(180deg, #208085 0%, rgba(32, 128, 133, 0) 100%);
+    color: #58ffb5;
+  }
+  @if ($theme == "primary-btn") {
+    background-color: #58ffb5;
+    color: #208085;
+    &:hover {
+      background-color: #feed7e;
+    }
+  }
+  @if ($theme == "secondary-btn") {
+    background-color: #208085;
+    color: #fff;
+
+    &:hover {
+      background-color: #0e4447;
+    }
+  }
+}

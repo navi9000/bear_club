@@ -14,10 +14,43 @@
   }
 }
 
-@mixin customPointer() {
-  cursor: url("/img/pointer.svg"), pointer;
+@mixin pointer($type: "click") {
+  @if ($type == "click") {
+    cursor: url("/img/pointer.svg"), pointer;
+  }
+  @if ($type == "double-click") {
+    cursor: url("/img/dblclick.png"), pointer;
+  }
 }
 
-@mixin dblclickPointer() {
-  cursor: url("/img/dblclick.png"), pointer;
+@mixin rounded($radius: 6px) {
+  border-radius: $radius;
+}
+
+@mixin bgImg($file, $width, $height, $position: null) {
+  background-image: url("/img/" + $file);
+  background-repeat: no-repeat;
+  background-size: $width $height;
+  width: $width;
+  height: $height;
+  @if ($position) {
+    background-position: $position;
+  }
+}
+
+@mixin transition() {
+  transition: 300ms;
+}
+
+@mixin shadowOnHover() {
+  &:hover {
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.26);
+  }
+}
+
+@mixin dialogBackdrop() {
+  &::backdrop {
+    backdrop-filter: blur(81.54845428466797px);
+    background: rgba(14, 68, 71, 0.2);
+  }
 }

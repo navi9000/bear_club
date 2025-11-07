@@ -8,10 +8,28 @@
   }
 }
 
-@mixin centered() {
+@mixin flex($gap: 0, $centered: null, $direction: null) {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: $gap;
+  @if ($centered == inline) {
+    justify-content: center;
+  }
+  @if ($centered == block) {
+    align-items: center;
+  }
+  @if ($centered == both) {
+    justify-content: center;
+    align-items: center;
+  }
+  @if ($direction) {
+    flex-direction: $direction;
+  }
+}
+
+@mixin centered() {
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
 }
 
 @mixin padding($value) {
@@ -26,9 +44,12 @@
   }
 }
 
-@mixin grid($cols) {
+@mixin grid($cols, $centered: null) {
   display: grid;
   grid-template-columns: repeat($cols, minmax(0, 1fr));
   gap: 20px;
   width: 100%;
+  @if ($centered == block) {
+    align-items: center;
+  }
 }
