@@ -34,4 +34,10 @@
       background-color: #0e4447;
     }
   }
+  @if ($theme == "hoverable-white") {
+    background-color: #fff;
+    &:hover {
+      background-color: #feed7e;
+    }
+  }
 }

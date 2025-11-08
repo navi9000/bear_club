@@ -85,6 +85,10 @@
     @include textSize("sm");
     color: #454545;
   }
+
+  &:hover .customcheckbox {
+    background-color: #feed7e !important;
+  }
 }
 
 .selector {
@@ -332,14 +336,17 @@
 
 .cancel-button {
   @include pointer();
-  @include bgImg("cross.svg", 18px, 18px);
-  @include transition();
-  @include theme("no-bg");
+  @include theme("hoverable-white");
+  @include maskImg("cross.svg");
+
   border: none;
   outline: none;
-  &:hover {
-    filter: invert(1);
-  }
+  width: 18px;
+  height: 18px;
+  // background-color: #fff;
+  // &:hover {
+  //   background-color: #feed7e;
+  // }
 }
 
 .button {

@@ -38,6 +38,11 @@
   }
 }
 
+@mixin maskImg($file, $size: contain) {
+  mask-image: url("/img/" + $file);
+  mask-size: $size;
+}
+
 @mixin transition() {
   transition: 300ms;
 }
