@@ -10,11 +10,11 @@
  */
 
 /**
- * @typedef {"pageTitle" | "reserveCheckbox" | "typeSelector" | "bearList" | "modal" | "removeCard" | "alert"} ViewName
+ * @typedef {"pageTitle" | "showDropdown" | "hideDropdown" |"reserveCheckbox" | "typeSelector" | "bearList" | "modal" | "removeCard" | "alert"} ViewName
  */
 
 /**
- * @typedef {"toggleReserve" | "selectType" | "acceptBear" | "rejectBear" | "openModal" | "closeModalAccept" | "closeModalReject" | "closeModalCancel" | "clickLogo"} ProjectEvent
+ * @typedef {"toggleReserve" | "clickSelect" | "clickOutsideDropdown" | "selectType" | "acceptBear" | "rejectBear" | "openModal" | "closeModalAccept" | "closeModalReject" | "closeModalCancel" | "clickLogo"} ProjectEvent
  */
 
 /**

@@ -87,24 +87,62 @@
   }
 }
 
-#type-selector {
-  @include pointer();
+.selector {
   @include textSize("sm");
   @include rounded();
-  @include bgImg("chevron.svg", 12px, 4px, right 10px top 50%);
-  @include theme("input");
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  padding-inline: 10px;
+  @include pointer();
   height: 32px;
   width: 100%;
-  border: none;
   position: relative;
-  outline: none;
+  z-index: 5;
 
-  option {
+  &::after {
+    @include bgImg("chevron.svg", 12px, 4px);
+    position: absolute;
+    content: "";
+    z-index: 10;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+
+  &_hidden {
+    & .selector__dropdown {
+      pointer-events: none;
+      opacity: 0;
+    }
+  }
+
+  &__input {
+    @include theme("input");
+    @include rounded();
     @include pointer();
+    height: inherit;
+    width: inherit;
+    padding-inline: 10px;
+    border: none;
+    outline: none;
+  }
+
+  &__dropdown {
+    @include rounded();
+    @include theme("input");
+    padding-block: 9px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    list-style-type: none;
+
+    & li {
+      @include flex(0, block);
+      @include pointer();
+      padding-inline: 10px;
+      height: 24px;
+      &:hover {
+        background-color: #feed7e;
+      }
+    }
   }
 }
 

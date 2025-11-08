@@ -12,6 +12,11 @@ class Controller {
     this.#view = view
 
     this.#view.bind("toggleReserve", this.#toggleReserve.bind(this))
+    this.#view.bind("clickSelect", this.#clickSelect.bind(this))
+    this.#view.bind(
+      "clickOutsideDropdown",
+      this.#clickOutsideDropdown.bind(this)
+    )
     this.#view.bind("selectType", this.#selectType.bind(this))
     this.#view.bind("acceptBear", this.#acceptBear.bind(this))
     this.#view.bind("rejectBear", this.#rejectBear.bind(this))
@@ -47,8 +52,18 @@ class Controller {
     })
   }
 
+  #clickSelect() {
+    this.#view.render("showDropdown")
+  }
+
+  #clickOutsideDropdown() {
+    this.#view.render("hideDropdown")
+  }
+
   #selectType({ reserve, selection }) {
     this.#view.render("pageTitle", selection)
+    this.#view.render("typeSelector", selection)
+    this.#view.render("hideDropdown")
     this.#model.read({ reserve, selection }, (list) => {
       this.#view.render("bearList", { list, selection })
     })

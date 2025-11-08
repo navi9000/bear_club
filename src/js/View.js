@@ -8,7 +8,9 @@ class View {
     this.$pageTitle = qs(".controls__title")
     this.$isReserve = qs("#is-reserve")
     this.$customCheckbox = qs(".customcheckbox")
-    this.$group = qs("#type-selector")
+    this.$group = qs(".selector")
+    this.$groupInput = qs(".selector__input")
+    this.$groupDropdown = qs(".selector__dropdown")
     this.$bearList = qs(".list")
     this.$modal = qs(".modal")
     this.$logo = qs(".logo")
@@ -30,8 +32,18 @@ class View {
           value ? " customcheckbox_checked" : ""
         }`
         break
+      case "showDropdown":
+        this.$group.classList.remove("selector_hidden")
+        break
+      case "hideDropdown":
+        this.$group.classList.add("selector_hidden")
+        break
       case "typeSelector":
-        this.$group.value = value
+        const label = qs(
+          `li[data-value="${value}"]`,
+          this.$groupDropdown
+        ).innerHTML
+        this.$groupInput.value = label
         break
       case "bearList":
         this.$bearList.innerHTML = this.#getBearList(value)
@@ -73,9 +85,23 @@ class View {
           })
         })
         break
+      case "clickSelect":
+        on(this.$groupInput, "click", (e) => {
+          e.preventDefault()
+          handler()
+        })
+        break
+      case "clickOutsideDropdown":
+        on(document, "click", (e) => {
+          if (e.target.closest(".selector")) {
+            return
+          }
+          handler()
+        })
+        break
       case "selectType":
-        on(this.$group, "change", (e) => {
-          const selection = e.target.value
+        delegate(this.$groupDropdown, "li", "click", (e) => {
+          const selection = e.target.attributes["data-value"].value
           setSP("selection", selection)
           handler({
             reserve: parseSP("reserve"),

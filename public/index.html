@@ -53,11 +53,14 @@
               <span class="checkboxlabel">Только из заповедника</span>
             </div>
           </label>
-          <select id="type-selector">
-            <option value="incoming">Входящие медведи</option>
-            <option value="accepted">Принятые медведи</option>
-            <option value="rejected">Отклоненные медведи</option>
-          </select>
+          <div class="selector selector_hidden">
+            <input id="selector" class="selector__input" role="combobox" />
+            <ul class="selector__dropdown">
+              <li data-value="incoming">Входящие медведи</li>
+              <li data-value="accepted">Принятые медведи</li>
+              <li data-value="rejected">Отклоненные медведи</li>
+            </ul>
+          </div>
       </div>
       <ul class="list">
       </ul>
