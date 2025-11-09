@@ -5,15 +5,29 @@
 @use "./layout.scss" as *;
 @use "./effects.scss" as *;
 
+:root {
+  font-size: 16px;
+  @media (max-width: 960px) {
+    font-size: 14px;
+  }
+}
+
 .header {
   @include container();
-  @include padding("sm");
+  @include paddingBlock("sm");
+  @include paddingInline("lg");
   @include theme("fringe");
+  @media (max-width: $md) {
+    @include paddingInline("md");
+  }
+  @media (max-width: $sm) {
+    @include paddingInline("sm");
+  }
 }
 
 .logo {
   @include pointer();
-  @include flex(12px, "block");
+  @include flex(0.75em, "block");
   width: max-content;
 
   &__text {
@@ -24,18 +38,34 @@
 
 .main {
   @include container();
-  @include padding("lg");
-  @include flex(40px, block, column);
+  @include paddingBlock("lg");
+  @include paddingInline("lg");
+  @include flex(2.5em, block, column);
   overflow: auto;
   scrollbar-gutter: stable;
   height: 100%;
+  @media (max-width: $md) {
+    @include paddingBlock("md");
+    @include paddingInline("md");
+    @include flex(2em, block, column);
+  }
+  @media (max-width: $sm) {
+    @include paddingInline("sm");
+  }
 }
 
 .footer {
   @include container();
-  @include padding("sm");
+  @include paddingBlock("sm");
+  @include paddingInline("lg");
   @include bgTheme();
   @include blendIn();
+  @media (max-width: $md) {
+    @include paddingInline("md");
+  }
+  @media (max-width: $sm) {
+    @include paddingInline("sm");
+  }
 
   & > * {
     @include flex(0, inline);
@@ -43,8 +73,12 @@
 }
 
 .controls {
-  @include grid(4, block);
+  @include grid(4, block, 1.25em);
   padding-inline: 0;
+
+  @media (max-width: 960px) {
+    @include grid(2, block, 1em);
+  }
 
   &__title {
     grid-column: span 2;
@@ -61,14 +95,14 @@
   }
 
   &__contentwrapper {
-    @include flex(10px, block);
+    @include flex(0.675em, block);
   }
 
   .customcheckbox {
     @include rounded();
     @include theme("input");
-    width: 20px;
-    height: 20px;
+    width: 1.25em;
+    height: 1.25em;
     position: relative;
 
     &_checked {
@@ -95,7 +129,7 @@
   @include textSize("sm");
   @include rounded();
   @include pointer();
-  height: 32px;
+  height: 2em;
   width: 100%;
   position: relative;
   z-index: 5;
@@ -106,7 +140,7 @@
     content: "";
     z-index: 10;
     top: 50%;
-    right: 10px;
+    right: 0.625em;
     transform: translateY(-50%);
   }
 
@@ -123,7 +157,7 @@
     @include pointer();
     height: inherit;
     width: inherit;
-    padding-inline: 10px;
+    padding-inline: 0.625em;
     border: none;
     outline: none;
   }
@@ -131,7 +165,7 @@
   &__dropdown {
     @include rounded();
     @include theme("input");
-    padding-block: 9px;
+    padding-block: 0.625em;
     position: absolute;
     top: 0;
     left: 0;
@@ -141,8 +175,8 @@
     & li {
       @include flex(0, block);
       @include pointer();
-      padding-inline: 10px;
-      height: 24px;
+      padding-inline: 0.625em;
+      height: 1.5em;
       &:hover {
         background-color: #feed7e;
       }
@@ -151,7 +185,13 @@
 }
 
 .list {
-  @include grid(4);
+  @include grid(4, null, 1.25em);
+  @media (max-width: 960px) {
+    @include grid(2, null, 1em);
+  }
+  @media (max-width: 580px) {
+    @include grid(1, null, 1em);
+  }
 }
 
 @mixin defaultCard() {
@@ -180,9 +220,12 @@
     @include transition();
     @include flex(0, null, column);
     @include shadowOnHover();
-    height: 349px;
+    height: 22em;
     overflow: hidden;
     background-color: var(--card-bg-color);
+    @media (max-width: $sm) {
+      height: max-content;
+    }
   }
 
   &__image {
@@ -190,6 +233,13 @@
     width: 100%;
     position: relative;
     flex-grow: 0;
+    @media (max-width: $md) {
+      height: 164px;
+    }
+
+    @media (max-width: $sm) {
+      height: 200px;
+    }
 
     img {
       @include flex();
@@ -206,20 +256,27 @@
     width: inherit;
     top: 0;
     left: 0;
-    padding-top: 16px;
+    padding-top: 1em;
     z-index: 1;
     text-align: center;
   }
 
   &__datawrapper {
-    @include flex(24px, both, column);
+    @include flex(1.5em, both, column);
     @include padding("md");
     flex-grow: 1;
     height: 100%;
+    @media (max-width: $md) {
+      @include padding("sm");
+      @include flex(0.5em, both, column);
+    }
   }
 
   &__descwrapper {
-    @include flex(10px, block, column);
+    @include flex(0.625em, block, column);
+    @media (max-width: $md) {
+      @include flex(0.5em, block, column);
+    }
   }
 
   &__name {
@@ -234,8 +291,11 @@
   }
 
   &__buttonwrapper {
-    @include flex(10px, block, column);
+    @include flex(0.625em, block, column);
     width: 100%;
+    @media (max-width: $md) {
+      @include flex(0.5em, block, column);
+    }
   }
 }
 
@@ -254,7 +314,8 @@
     border: none;
     height: max-content;
     width: max-content;
-    top: 30px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   &__inlaywrapper {
@@ -276,6 +337,10 @@
       max-height: calc(100vh - 60px);
       height: max-content;
       overflow: auto;
+      @media (max-width: $sm) {
+        width: calc(100vw - 4em);
+        max-height: calc(100vh - 2em);
+      }
     }
   }
 
@@ -284,7 +349,7 @@
     @include padding("md");
     @include theme("inreserve-label");
     position: absolute;
-    height: 200px;
+    height: 12.5em;
     width: inherit;
     top: 0;
     left: 0;
@@ -305,12 +370,12 @@
   }
 
   &__datawrapper {
-    @include flex(24px, null, column);
+    @include flex(1.5em, null, column);
     @include padding("md");
   }
 
   &__descwrapper {
-    @include flex(10px, null, column);
+    @include flex(0.625em, null, column);
   }
 
   &__name {
@@ -329,7 +394,7 @@
   }
 
   &__buttonwrapper {
-    @include flex(10px);
+    @include flex(0.625em);
     width: 100%;
   }
 }
@@ -343,19 +408,15 @@
   outline: none;
   width: 18px;
   height: 18px;
-  // background-color: #fff;
-  // &:hover {
-  //   background-color: #feed7e;
-  // }
 }
 
 .button {
   @include flex(0, both, column);
   @include textSize("sm");
   @include pointer();
-  @include rounded(16px);
+  @include rounded(1em);
   @include transition();
-  height: 32px;
+  height: 2em;
   width: 100%;
   border: 2px solid;
   border-color: transparent;

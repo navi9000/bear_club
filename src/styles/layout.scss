@@ -34,20 +34,44 @@
 
 @mixin padding($value) {
   @if ($value == "lg") {
-    padding: 40px;
+    padding: 2.5em;
   }
   @if ($value == "md") {
-    padding: 20px;
+    padding: 1.25em;
   }
   @if ($value == "sm") {
-    padding: 10px;
+    padding: 0.625em;
   }
 }
 
-@mixin grid($cols, $centered: null) {
+@mixin paddingInline($value) {
+  @if ($value == "lg") {
+    padding-inline: 2.5em;
+  }
+  @if ($value == "md") {
+    padding-inline: 1.25em;
+  }
+  @if ($value == "sm") {
+    padding-inline: 0.625em;
+  }
+}
+
+@mixin paddingBlock($value) {
+  @if ($value == "lg") {
+    padding-block: 2.5em;
+  }
+  @if ($value == "md") {
+    padding-block: 1.25em;
+  }
+  @if ($value == "sm") {
+    padding-block: 0.625em;
+  }
+}
+
+@mixin grid($cols, $centered: null, $gap: 1.25em) {
   display: grid;
   grid-template-columns: repeat($cols, minmax(0, 1fr));
-  gap: 20px;
+  gap: $gap;
   width: 100%;
   @if ($centered == block) {
     align-items: center;

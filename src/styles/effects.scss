@@ -23,7 +23,7 @@
   }
 }
 
-@mixin rounded($radius: 6px) {
+@mixin rounded($radius: 0.375em) {
   border-radius: $radius;
 }
 
@@ -41,6 +41,7 @@
 @mixin maskImg($file, $size: contain) {
   mask-image: url("/img/" + $file);
   mask-size: $size;
+  mask-repeat: no-repeat;
 }
 
 @mixin transition() {

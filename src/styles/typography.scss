@@ -4,12 +4,12 @@
 
 @mixin textSize($value) {
   @if ($value == "lg") {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
   @if ($value == "md") {
-    font-size: 18px;
+    font-size: 1.125rem;
   }
   @if ($value == "sm") {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 }
