@@ -1,16 +1,15 @@
-@mixin blendIn() {
+@mixin blendIn($height, $placement) {
   position: relative;
-
   &::after {
-    position: absolute;
-    left: 0;
-    bottom: 100%;
-    width: 100%;
-    height: 40px;
     content: "";
+    position: absolute;
+    width: 100%;
+    height: $height;
     background-color: #f2f2f2;
-    mask-image: linear-gradient(to bottom, transparent, #000);
+    mask-image: linear-gradient(to $placement, transparent 0%, #000 100%);
     pointer-events: none;
+    left: 0;
+    #{$placement}: 0;
   }
 }
 

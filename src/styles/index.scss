@@ -37,20 +37,27 @@
 }
 
 .main {
-  @include container();
-  @include paddingBlock("lg");
-  @include paddingInline("lg");
-  @include flex(2.5em, block, column);
-  overflow: auto;
-  scrollbar-gutter: stable;
-  height: 100%;
-  @media (max-width: $md) {
-    @include paddingBlock("md");
-    @include paddingInline("md");
-    @include flex(2em, block, column);
-  }
-  @media (max-width: $sm) {
-    @include paddingInline("sm");
+  @include blendIn(2.5em, bottom);
+  height: auto;
+  overflow: hidden;
+
+  &__content {
+    @include container();
+    @include paddingBlock("lg");
+    @include paddingInline("lg");
+    @include flex(2.5em, block, column);
+    overflow: auto;
+    scrollbar-gutter: stable;
+    height: 100%;
+
+    @media (max-width: $md) {
+      @include paddingBlock("md");
+      @include paddingInline("md");
+      @include flex(2em, block, column);
+    }
+    @media (max-width: $sm) {
+      @include paddingInline("sm");
+    }
   }
 }
 
@@ -59,7 +66,6 @@
   @include paddingBlock("sm");
   @include paddingInline("lg");
   @include bgTheme();
-  @include blendIn();
   @media (max-width: $md) {
     @include paddingInline("md");
   }

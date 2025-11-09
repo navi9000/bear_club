@@ -44,27 +44,29 @@
       </div>
     </header>
     <main class="main">
-      <div class="controls">
-        <h1 class="controls__title"></h1>
-        <label for="is-reserve" class="checkboxlabel">
-          <input type="checkbox" id="is-reserve"></input>
-          <div class="checkboxlabel__contentwrapper">
-            <span class="customcheckbox"></span>
-            <span class="checkboxlabel">Только из заповедника</span>
+      <div class="main__content">
+        <div class="controls">
+          <h1 class="controls__title"></h1>
+          <label for="is-reserve" class="checkboxlabel">
+            <input type="checkbox" id="is-reserve"></input>
+            <div class="checkboxlabel__contentwrapper">
+              <span class="customcheckbox"></span>
+              <span class="checkboxlabel">Только из заповедника</span>
+            </div>
+          </label>
+          <div class="selector selector_hidden">
+            <input id="selector" class="selector__input" role="combobox" />
+            <ul class="selector__dropdown">
+              <li data-value="incoming">Входящие медведи</li>
+              <li data-value="accepted">Принятые медведи</li>
+              <li data-value="rejected">Отклоненные медведи</li>
+            </ul>
           </div>
-        </label>
-        <div class="selector selector_hidden">
-          <input id="selector" class="selector__input" role="combobox" />
-          <ul class="selector__dropdown">
-            <li data-value="incoming">Входящие медведи</li>
-            <li data-value="accepted">Принятые медведи</li>
-            <li data-value="rejected">Отклоненные медведи</li>
-          </ul>
         </div>
+        <ul class="list">
+        </ul>
+        <dialog class="modal"></dialog>
       </div>
-      <ul class="list">
-      </ul>
-      <dialog class="modal"></dialog>
     </main>
     <footer class="footer">
       <div>
