@@ -3,12 +3,6 @@ import { getBears, getBearById, acceptBear, rejectBear } from "./utils/http"
 
 class Store {
   /**
-   * @type {[Bear]=}
-   */
-  #bearList
-  #bearItems = {}
-
-  /**
    * @type {IDBDatabase?}
    */
   #db = null
@@ -40,9 +34,8 @@ class Store {
    *
    * @param {number} id
    * @param {"accepted" | "rejected"} status
-   * @param {function} callback
    */
-  #addBearToDB(id, status, callback) {
+  #addBearToDB(id, status) {
     if (!this.#db) {
       return
     }
@@ -51,22 +44,19 @@ class Store {
     const objectStore = transaction.objectStore(this.#DB_STORE)
 
     const operation = objectStore.add({ id, status })
-
-    operation.onerror = () => {
-      console.error("Failed to save a bear")
-    }
-
-    operation.success = () => {
-      callback.call(this, { id, status })
-    }
   }
 
   /**
-   *
+   * @param {[Bear]=} bearList
    * @param {function} callback
    */
-  #readDB(callback) {
+  #readDB(bearList, callback) {
     if (!this.#db) {
+      callback.call(this, undefined)
+      return
+    }
+    if (!bearList) {
+      callback.call(this, undefined)
       return
     }
 
@@ -84,11 +74,15 @@ class Store {
         rejected: result
           .filter((item) => item.status === "rejected")
           .map((item) => item.id),
+        incoming: bearList
+          .filter((bear) => !result.some((item) => item.id === bear.id))
+          .map((item) => item.id),
       })
     }
 
     operation.onerror = () => {
       console.error("Failed to read the database")
+      callback.call(this, undefined)
     }
   }
 
@@ -98,18 +92,12 @@ class Store {
    * @param {function} callback
    */
   async getBears(query, callback) {
-    if (!this.#bearList) {
-      this.#bearList = await getBears()
-    }
+    const bearList = await getBears()
 
-    this.#readDB((bearIdListInDB) => {
-      if (!bearIdListInDB) {
-        return
-      }
-
+    this.#readDB(bearList, (bearIdList) => {
       callback.call(
         this,
-        this.#bearList
+        bearList
           ?.filter((item) => {
             if (query?.reserve && !item.in_reserve) {
               return false
@@ -117,16 +105,8 @@ class Store {
             return true
           })
           .filter((item) => {
-            if (query?.selection === "accepted") {
-              return bearIdListInDB.accepted.includes(item.id)
-            } else if (query?.selection === "rejected") {
-              return bearIdListInDB.rejected.includes(item.id)
-            } else {
-              return ![
-                ...bearIdListInDB.accepted,
-                ...bearIdListInDB.rejected,
-              ].includes(item.id)
-            }
+            const selection = query?.selection ?? "incoming"
+            return bearIdList[selection].includes(item.id)
           })
       )
     })
@@ -138,10 +118,7 @@ class Store {
    * @param {function} callback
    */
   async getBear(id, callback) {
-    if (!this.#bearItems[id]) {
-      this.#bearItems[id] = await getBearById(id)
-    }
-    callback.call(this, this.#bearItems[id])
+    callback.call(this, await getBearById(id))
   }
 
   /**
@@ -152,13 +129,10 @@ class Store {
   async acceptBear(id, callback) {
     const result = await acceptBear(id)
     const isSuccess = result?.success
-    if (!isSuccess) {
-      callback.call(this, isSuccess)
-      return
+    if (isSuccess) {
+      this.#addBearToDB(id, "accepted")
     }
-    this.#addBearToDB(id, "accepted", () => {
-      callback.call(this, isSuccess)
-    })
+    callback.call(this, isSuccess)
   }
 
   /**
@@ -169,13 +143,10 @@ class Store {
   async rejectBear(id, callback) {
     const result = await rejectBear(id)
     const isSuccess = result?.success
-    if (!isSuccess) {
-      callback.call(this, isSuccess)
-      return
+    if (isSuccess) {
+      this.#addBearToDB(id, "rejected")
     }
-    this.#addBearToDB(id, "rejected", () => {
-      callback.call(this, isSuccess)
-    })
+    callback.call(this, isSuccess)
   }
 }
 

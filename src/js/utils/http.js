@@ -1,6 +1,7 @@
 const SERVER_ROOT = "https://private-9d5e37a-testassignment.apiary-mock.com"
 const SERVER_ROOT_2 =
   "https://private-dd610-ruporttestassignment.apiary-mock.com"
+const CACHE_NAME = "bearclub.com-v1"
 
 /**
  *
@@ -9,10 +10,20 @@ const SERVER_ROOT_2 =
 async function query(endpoint, isSecondServer = false) {
   try {
     const root = isSecondServer ? SERVER_ROOT_2 : SERVER_ROOT
-    const res = await fetch(root.concat(endpoint))
+    const queryRoot = root.concat(endpoint)
+
+    const match = await caches.match(queryRoot)
+    if (match) {
+      return match.json()
+    }
+
+    const res = await fetch(queryRoot)
     if (!res.ok) {
       throw res.statusText
     }
+    const cache = await caches.open(CACHE_NAME)
+    cache.put(queryRoot, res.clone())
+
     const json = await res.json()
     return json
   } catch (e) {

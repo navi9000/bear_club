@@ -71,6 +71,7 @@ class Controller {
 
   #acceptBear(id) {
     this.#model.update(id, "accept", (isSuccess) => {
+      console.log({ isSuccess })
       if (!isSuccess) {
         this.#view.render("alert")
       } else {
