@@ -145,6 +145,7 @@ class View {
           setSP("selection", null)
           handler()
         })
+        break
       default:
         console.warn("Unknown event: ", event)
     }
