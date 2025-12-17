@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build project
-        run: npm run Build
+        run: npm run build
       - name: Setup pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
