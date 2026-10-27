@@ -15,10 +15,10 @@
 
 @mixin pointer($type: "click") {
   @if ($type == "click") {
-    cursor: url("/img/pointer.svg"), pointer;
+    cursor: url("../img/pointer.svg"), pointer;
   }
   @if ($type == "double-click") {
-    cursor: url("/img/dblclick.png"), pointer;
+    cursor: url("../img/dblclick.png"), pointer;
   }
 }
 
@@ -27,7 +27,7 @@
 }
 
 @mixin bgImg($file, $width, $height, $position: null) {
-  background-image: url("/img/" + $file);
+  background-image: url("../img/" + $file);
   background-repeat: no-repeat;
   background-size: $width $height;
   width: $width;
@@ -38,7 +38,7 @@
 }
 
 @mixin maskImg($file, $size: contain) {
-  mask-image: url("/img/" + $file);
+  mask-image: url("../img/" + $file);
   mask-size: $size;
   mask-repeat: no-repeat;
 }
